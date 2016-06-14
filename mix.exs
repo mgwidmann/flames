@@ -51,10 +51,10 @@ defmodule Flames.Mixfile do
 
   defp deps do
     [
-      {:earmark, "~> 0.1", only: :docs},
-      {:ecto, "~> 1.1", optional: true},
-      {:ex_doc, "~> 0.11", only: :docs},
+      {:ecto, "~> 1.1"},
       {:phoenix, "~> 1.1", optional: true},
+      {:ex_doc, "~> 0.11", only: :docs},
+      {:earmark, "~> 0.1", only: :docs},
       {:phoenix_ecto, "~> 2.0", only: :test},
       {:phoenix_html, "~> 2.3", only: :test},
     ]
@@ -72,6 +72,7 @@ defmodule Flames.Mixfile do
   defp package do
     [
       maintainers: ["Matt Widmann"],
+      licenses: ["MIT"],
       links: %{
         "GitHub" => "http://github.com/mgwidmann/flames",
         "Docs" => "http://hexdocs.pm/flames/"
