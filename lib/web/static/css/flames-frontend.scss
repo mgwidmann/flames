@@ -1,0 +1,19 @@
+#errors {
+  tr.error-row {
+    cursor: pointer;
+  }
+  .message {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .level {
+    max-width: 30px;
+    text-transform: uppercase;
+  }
+}
+
+.info-row {
+  margin-top: 10px;
+}
