@@ -27,11 +27,15 @@ defmodule Flames.Error do
     |> cast(params, @required, @optional)
   end
 
-  def reported?(hash) when is_binary(hash) do
+  def find_reported(hash) when is_binary(hash) do
     import Ecto.Query
     from e in __MODULE__,
       where: e.hash == ^hash,
-      limit: 1,
-      select: true
+      limit: 1
+  end
+
+  def reported?(hash) when is_binary(hash) do
+    import Ecto.Query
+    from e in find_reported(hash), select: true
   end
 end

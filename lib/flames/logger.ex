@@ -56,7 +56,7 @@ defmodule Flames.Logger do
   defp error_changeset(level, {Logger, msg, ts, md}) do
     msg = IO.chardata_to_string(msg)
     hash = hash(msg)
-    if e = @repo.get_by(Flames.Error, hash: hash) do
+    if e = Flames.Error.find_reported(hash) |> @repo.one() do
       Flames.Error.changeset(e, %{count: e.count + 1})
     else
       Flames.Error.changeset(%Flames.Error{}, %{
