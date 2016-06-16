@@ -89,10 +89,13 @@ defmodule Flames.Logger do
     ["(#{lib})" | file]
   end
 
+  @args_regex ~r/Args: [.*?]/
+  @struct_regex ~r/%.*?{.*?}/
+  @function_regex ~r/#Function<\d+\.\d+\/\d+ in .*?\/\d{1}>/
   @pid_regex ~r/#PID<\d+\.\d+\.\d+>/
   @id_regex ~r/id: \d+/
   @dates_regex ~r/#(Ecto\.)?DateTime<.*?>|#<DateTime(.*?)>/
-  @hash_ignore_regex ~r/#{@pid_regex.source}|#{@id_regex.source}|#{@dates_regex.source}/
+  @hash_ignore_regex ~r/#{@pid_regex.source}|#{@id_regex.source}|#{@dates_regex.source}|#{@function_regex.source}|#{@struct_regex.source}|#{@args_regex.source}/
   def hash(list) when is_list(list), do: list |> hd |> hash
   def hash(msg) when is_binary(msg) do
     msg = msg |> String.replace(@hash_ignore_regex, "")
