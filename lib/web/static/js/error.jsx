@@ -17,6 +17,7 @@ class Error extends React.Component {
   }
 
   render() {
+    let incidents = this.state.error.incidents;
     return (
       <Layout>
         <div className="row">
@@ -25,7 +26,7 @@ class Error extends React.Component {
           </div>
         </div>
         <div className="row">
-          <span>Last occurance: {this.state.error.incidents[0] && this.state.error.incidents[0].timestamp}</span>
+          <span>Last occurance: {incidents && incidents[0] && incidents[0].timestamp}</span>
           <pre>
             {this.state.error.message}
           </pre>

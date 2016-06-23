@@ -59921,6 +59921,7 @@
 	  _createClass(Error, [{
 	    key: 'render',
 	    value: function render() {
+	      var incidents = this.state.error.incidents;
 	      return _react2['default'].createElement(
 	        _layoutJsx2['default'],
 	        null,
@@ -59944,7 +59945,7 @@
 	            'span',
 	            null,
 	            'Last occurance: ',
-	            this.state.error.incidents[0] && this.state.error.incidents[0].timestamp
+	            incidents && incidents[0] && incidents[0].timestamp
 	          ),
 	          _react2['default'].createElement(
 	            'pre',
