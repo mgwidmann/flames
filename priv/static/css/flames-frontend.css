@@ -8362,19 +8362,17 @@ button.close {
   }
 }
 
-#errors tr.error-row {
+#errors .error-row {
   cursor: pointer;
 }
 
 #errors .message {
-  max-width: 250px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 #errors .level {
-  max-width: 30px;
   text-transform: uppercase;
 }
 

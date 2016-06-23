@@ -1,5 +1,7 @@
 import React from 'react';
 import _ from 'underscore';
+import ResolveButton from './resolve-button.jsx';
+import FlipMove from 'react-flip-move';
 
 class ErrorTable extends React.Component {
 
@@ -41,15 +43,34 @@ class ErrorTable extends React.Component {
     this.props.router.push(`/errors/${error.id}`);
   }
 
+  matchesSearch(error) {
+    if (this.props.search && !this.state.loading) {
+      if (error.message && error.message.includes(this.props.search) || error.file && error.file.includes(this.props.search)) {
+        return error;
+      }
+      return false;
+    } else {
+      return error;
+    }
+  }
+
+  removeError(error) {
+    var errors = _.reject(this.state.errors, (e) => { return e.id == error.id });
+    this.setState({errors: errors});
+  }
+
   renderError(error) {
-    let onClick = ()=> { this.handleClick(error) };
+    let rowClick = ()=> { this.handleClick(error) };
     return (
-      <tr key={error.id} className={`${this.rowColor(error)} error-row`} onClick={onClick}>
-        <td className="level"><span className={`label ${this.levelColor(error)}`}>{error.level}</span></td>
-        <td className="message">{error.message}</td>
-        <td className="file">{this.renderFileInfo(error)}</td>
-        <td className="count">{error.count}</td>
-      </tr>
+      <div key={error.id} className={`${this.rowColor(error)} info-row error-row row`} onClick={rowClick}>
+        <span className="col-xs-1 level"><span className={`label ${this.levelColor(error)}`}>{error.level}</span></span>
+        <span className="col-xs-5 message">{error.message}</span>
+        <span className="col-xs-3 file">{this.renderFileInfo(error)}</span>
+        <span className="col-xs-1 count">{error.count}</span>
+        <span className="col-xs-2 resolve">
+          <ResolveButton error={error} removeError={()=> { this.removeError(error) } } />
+        </span>
+      </div>
     );
   }
 
@@ -80,12 +101,10 @@ class ErrorTable extends React.Component {
 
   renderErrors() {
     return (
-      <div>
-        <table id="errors" className="table table-stripped table-hover">
-          <tbody>
-            {this.state.errors.map(this.renderError.bind(this))}
-          </tbody>
-        </table>
+      <div id="errors" className="table table-stripped table-hover">
+        <FlipMove enterAnimation="fade" leaveAnimation="fade" staggerDelayBy={50} duration={500} >
+          {_.filter(this.state.errors, this.matchesSearch.bind(this)).map(this.renderError.bind(this))}
+        </FlipMove>
       </div>
     );
   }

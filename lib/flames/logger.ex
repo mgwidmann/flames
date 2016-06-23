@@ -57,7 +57,12 @@ defmodule Flames.Logger do
     msg = IO.chardata_to_string(msg)
     hash = hash(msg)
     if e = Flames.Error.find_reported(hash) |> @repo.one() do
-      Flames.Error.changeset(e, %{count: e.count + 1})
+      e
+      |> @repo.preload([:incidents])
+      |> Flames.Error.recur_changeset(e, %{
+        count: e.count + 1,
+        incidents: [%{message: msg, timestamp: ts} | e.incidents]
+      })
     else
       Flames.Error.changeset(%Flames.Error{}, %{
         message: msg,

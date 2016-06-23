@@ -16,6 +16,8 @@ defmodule Flames.Error do
     field :count, :integer
     field :hash, :string
 
+    has_many :incidents, Flames.Error.Incident
+
     timestamps
   end
 
@@ -25,6 +27,12 @@ defmodule Flames.Error do
   def changeset(model, params \\ %{}) do
     model
     |> cast(params, @required, @optional)
+  end
+
+  def recur_changeset(model, params \\ %{}) do
+    model
+    |> cast(params, @required, @optional)
+    |> cast_assoc(:incidents)
   end
 
   def find_reported(hash) when is_binary(hash) do

@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 import {Socket} from "phoenix";
 import ErrorTable from './error-table.jsx';
 import Error from './error.jsx';
+import Layout from './layout.jsx';
 import { Router, Route, hashHistory, IndexRoute, withRouter } from 'react-router';
 
 class Main extends React.Component {
@@ -20,7 +21,9 @@ class Main extends React.Component {
 
   render () {
     return (
-      <ErrorTable socket={this.state.socket} router={this.props.router} />
+      <Layout>
+        <ErrorTable socket={this.state.socket} router={this.props.router} search={this.state.search} />
+      </Layout>
     );
   }
 }
