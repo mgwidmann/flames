@@ -54,14 +54,14 @@ defmodule Flames.Logger do
   end
 
   defp error_changeset(level, {Logger, msg, ts, md}) do
-    msg = IO.chardata_to_string(msg)
-    hash = hash(msg)
+    message = normalize_message(msg)
+    hash = hash(message.full)
     if e = Flames.Error.find_reported(hash) |> @repo.one() do
       e
       |> @repo.preload([:incidents])
-      |> Flames.Error.recur_changeset(e, %{
+      |> Flames.Error.recur_changeset(%{
         count: e.count + 1,
-        incidents: [%{message: msg, timestamp: ts} | e.incidents]
+        incidents: [%{message: message.full, timestamp: ts} | e.incidents]
       })
     else
       Flames.Error.changeset(%Flames.Error{}, %{
@@ -70,13 +70,23 @@ defmodule Flames.Logger do
         timestamp: ts,
         alive: Process.alive?(md[:pid]),
         module: md[:module] && to_string(md[:module]),
-        function: md[:function],
+        function: message.fun,
         file: md[:file] |> file_string(),
         line: md[:line],
         hash: hash,
         count: 1
       })
     end
+  end
+
+  defp normalize_message(full_message = [message, stack, fun | args]) do
+    %{
+      message: IO.chardata_to_string(message),
+      stack: IO.chardata_to_string(stack),
+      fun: String.trim(fun) |> String.replace("Function: ", ""),
+      args: String.trim(args) |> String.replace("Args: "),
+      full: IO.chardata_to_string(full_message)
+    }
   end
 
   @cwd File.cwd! |> String.replace("flames", "")
