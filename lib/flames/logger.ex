@@ -70,7 +70,7 @@ defmodule Flames.Logger do
         timestamp: ts,
         alive: Process.alive?(md[:pid]),
         module: md[:module] && to_string(md[:module]),
-        function: message.fun,
+        function: message.fun || md[:function],
         file: md[:file] |> file_string(),
         line: md[:line],
         hash: hash,
@@ -86,6 +86,15 @@ defmodule Flames.Logger do
       fun: String.trim(fun) |> String.replace("Function: ", ""),
       args: String.trim(args) |> String.replace("Args: "),
       full: IO.chardata_to_string(full_message)
+    }
+  end
+  defp normalize_message(message) do
+    %{
+      message: message,
+      stack: nil,
+      fun: nil,
+      args: nil,
+      full: message
     }
   end
 
