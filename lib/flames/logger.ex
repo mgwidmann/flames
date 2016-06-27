@@ -83,8 +83,8 @@ defmodule Flames.Logger do
     %{
       message: IO.chardata_to_string(message),
       stack: IO.chardata_to_string(stack),
-      fun: String.trim(fun) |> String.replace("Function: ", ""),
-      args: String.trim(args) |> String.replace("Args: "),
+      fun: String.strip(fun) |> String.replace("Function: ", ""),
+      args: String.strip(args) |> String.replace("Args: "),
       full: IO.chardata_to_string(full_message)
     }
   end
