@@ -17,7 +17,17 @@ class Error extends React.Component {
   }
 
   render() {
-    let incidents = this.state.error.incidents;
+    const { incidents, module, line, file } = this.state.error;
+    const func = this.state.error['function'];
+    let moduleLine = null;
+    if(module && func && file && line) {
+      moduleLine = (
+        <span>
+          <h5>{module}.{func}</h5>
+          <h6>{file}:{line}</h6>
+        </span>
+      )
+    }
     return (
       <Layout>
         <div className="row">
@@ -27,6 +37,7 @@ class Error extends React.Component {
         </div>
         <div className="row">
           <span>Last occurance: {incidents && incidents[0] && incidents[0].timestamp}</span>
+          {moduleLine}
           <pre>
             {this.state.error.message}
           </pre>

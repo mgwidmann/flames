@@ -36,16 +36,19 @@ defmodule Flames.Logger do
   end
 
   def post_event(level, data) do
-    level
-    |> error_changeset(data)
-    |> @repo.insert_or_update()
-    |> broadcast()
+    try do
+      level
+      |> error_changeset(data)
+      |> @repo.insert_or_update!()
+      |> broadcast()
+    catch
+      error -> Logger.error(error, flames: true)
+    end
   end
 
-  defp broadcast({:ok, error}) do
+  defp broadcast(error) do
     @endpoint.broadcast("errors", "error", error)
   end
-  defp broadcast({:error, _}), do: nil
 
   defp configure(options \\ []) do
     options = Keyword.merge(options, [])
@@ -53,21 +56,21 @@ defmodule Flames.Logger do
     Application.put_env(:logger, :flames, flames_config)
   end
 
-  defp error_changeset(level, {Logger, msg, ts, md}) do
+  defp error_changeset(level, {Logger, msg, {date, {hour, min, sec, _ms}}, md}) do
     message = normalize_message(msg)
     hash = hash(message.full)
     if e = Flames.Error.find_reported(hash) |> @repo.one() do
+      e = e |> @repo.preload([:incidents])
       e
-      |> @repo.preload([:incidents])
       |> Flames.Error.recur_changeset(%{
         count: e.count + 1,
-        incidents: [%{message: message.full, timestamp: ts} | e.incidents]
+        incidents: [%{message: message.full, timestamp: {date, {hour, min, sec}}}]
       })
     else
       Flames.Error.changeset(%Flames.Error{}, %{
-        message: msg,
+        message: message.full,
         level: to_string(level),
-        timestamp: ts,
+        timestamp: {date, {hour, min, sec}},
         alive: Process.alive?(md[:pid]),
         module: md[:module] && to_string(md[:module]),
         function: message.fun || md[:function],
@@ -84,17 +87,17 @@ defmodule Flames.Logger do
       message: IO.chardata_to_string(message),
       stack: IO.chardata_to_string(stack),
       fun: String.strip(fun) |> String.replace("Function: ", ""),
-      args: String.strip(args) |> String.replace("Args: ", ""),
+      args: args |> IO.chardata_to_string() |> String.strip() |> String.replace("Args: ", ""),
       full: IO.chardata_to_string(full_message)
     }
   end
   defp normalize_message(message) do
     %{
-      message: message,
+      message: IO.chardata_to_string(message),
       stack: nil,
       fun: nil,
       args: nil,
-      full: message
+      full: IO.chardata_to_string(message)
     }
   end
 
@@ -105,13 +108,15 @@ defmodule Flames.Logger do
     |> String.replace(@cwd, "")
     |> String.split("/")
     |> file_string()
+    |> Enum.join("/")
   end
   defp file_string(["deps", lib | file]) do
-    ["(#{lib})" | file]
+    ["(#{lib}) " | file]
   end
-  defp file_string([lib | file]) do
-    ["(#{lib})" | file]
+  defp file_string([lib | file]) when is_binary(lib) do
+    ["(#{lib}) " | file]
   end
+  defp file_string(list), do: list
 
   @args_regex ~r/Args: [.*?]/
   @struct_regex ~r/%.*?{.*?}/

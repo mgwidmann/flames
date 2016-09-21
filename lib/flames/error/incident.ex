@@ -2,7 +2,7 @@ defmodule Flames.Error.Incident do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Poison.Encoder, except: [:__meta__]}
+  @derive {Poison.Encoder, except: [:__meta__, :error]}
 
   schema "error_incidents" do
     field :message, :string

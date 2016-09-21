@@ -5,7 +5,8 @@ defmodule Flames do
   # for more information on OTP Applications
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
-
+    require Logger
+    Logger.debug "Starting flames!", flames: true
     # Define workers and child supervisors to be supervised
     children = [
       supervisor(Task.Supervisor, [])

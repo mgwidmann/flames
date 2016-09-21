@@ -4,7 +4,7 @@ defmodule Flames.Mixfile do
   def project do
     [
       app: :flames,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.0",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: compilers(Mix.env),
