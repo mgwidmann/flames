@@ -13,9 +13,9 @@ class ErrorTable extends React.Component {
       .receive("error", resp => { });
     channel.on('error', (error) => {
       var errors = _.clone(this.state.errors);
-      var error = _.findWhere(errors, {id: error.id});
-      if (error){
-        error.count += 1;
+      var existingError = _.findWhere(errors, {id: error.id});
+      if (existingError){
+        existingError.count += 1;
         this.setState({errors: errors});
       } else {
         this.setState({errors: [error].concat(errors)});

@@ -1,10 +1,10 @@
-# Flames
+# Flames [![hex.pm version](https://img.shields.io/hexpm/v/flames.svg)](https://hex.pm/packages/flames)
 
-**TODO: Add description**
+
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+The package can be installed as:
 
   1. Add `flames` to your list of dependencies in `mix.exs`:
 
@@ -26,8 +26,8 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
     ```elixir
     config :flames,
-      repo: SlackCoder.Repo,
-      endpoint: SlackCoder.Endpoint
+      repo: MyPhoenixApp.Repo,
+      endpoint: MyPhoenixApp.Endpoint
 
     config :logger,
       backends: [:console, Flames.Logger]
@@ -52,10 +52,13 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
         add :count, :integer
         add :hash, :string
 
+        add :incidents, :json
+
         timestamps
       end
 
       create index(:errors, [:hash])
+      create index(:errors, [:updated_at])
     end
   end
   ```

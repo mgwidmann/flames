@@ -51,11 +51,11 @@ defmodule Flames.Mixfile do
 
   defp deps do
     [
-      {:ecto, "~> 1.1"},
+      {:ecto, "~> 1.1 or ~> 2.0"},
       {:phoenix, "~> 1.1", optional: true},
       {:ex_doc, "~> 0.11", only: :docs},
       {:earmark, "~> 0.1", only: :docs},
-      {:phoenix_ecto, "~> 2.0", only: :test},
+      {:phoenix_ecto, "~> 2.0 or ~> 3.0", only: :test},
       {:phoenix_html, "~> 2.3", only: :test},
     ]
   end

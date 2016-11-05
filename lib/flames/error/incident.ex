@@ -4,11 +4,9 @@ defmodule Flames.Error.Incident do
 
   @derive {Poison.Encoder, except: [:__meta__, :error]}
 
-  schema "error_incidents" do
+  embedded_schema do
     field :message, :string
     field :timestamp, Ecto.DateTime
-
-    belongs_to :error, Flames.Error
 
     timestamps
   end

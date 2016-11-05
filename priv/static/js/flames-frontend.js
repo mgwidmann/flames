@@ -33998,9 +33998,9 @@
 	    channel.join().receive("ok", function (resp) {}).receive("error", function (resp) {});
 	    channel.on('error', function (error) {
 	      var errors = _underscore2['default'].clone(_this.state.errors);
-	      var error = _underscore2['default'].findWhere(errors, { id: error.id });
-	      if (error) {
-	        error.count += 1;
+	      var existingError = _underscore2['default'].findWhere(errors, { id: error.id });
+	      if (existingError) {
+	        existingError.count += 1;
 	        _this.setState({ errors: errors });
 	      } else {
 	        _this.setState({ errors: [error].concat(errors) });
@@ -35850,7 +35850,7 @@
 	        null,
 	        _react2['default'].createElement(
 	          _reactBootstrap.Button,
-	          { bsStyle: 'danger', onClick: this.resolveClick.bind(this) },
+	          { bsStyle: 'danger', className: 'btn-xs', onClick: this.resolveClick.bind(this) },
 	          'Resolve'
 	        ),
 	        this.renderModal()

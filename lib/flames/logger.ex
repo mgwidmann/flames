@@ -41,13 +41,19 @@ defmodule Flames.Logger do
       |> error_changeset(data)
       |> @repo.insert_or_update!()
       |> broadcast()
+    rescue
+      error -> Logger.error(Exception.format(:error, error), flames: true)
     catch
       error -> Logger.error(error, flames: true)
     end
   end
 
-  defp broadcast(error) do
-    @endpoint.broadcast("errors", "error", error)
+  if @endpoint do
+    defp broadcast(error) do
+      @endpoint.broadcast("errors", "error", error)
+    end
+  else
+    defp broadcast(error), do: error # No op
   end
 
   defp configure(options \\ []) do
@@ -60,11 +66,10 @@ defmodule Flames.Logger do
     message = normalize_message(msg)
     hash = hash(message.full)
     if e = Flames.Error.find_reported(hash) |> @repo.one() do
-      e = e |> @repo.preload([:incidents])
       e
       |> Flames.Error.recur_changeset(%{
         count: e.count + 1,
-        incidents: [%{message: message.full, timestamp: {date, {hour, min, sec}}}]
+        incidents: [%{message: message.full, timestamp: {date, {hour, min, sec}}} | Enum.map(e.incidents, &Map.from_struct/1)]
       })
     else
       Flames.Error.changeset(%Flames.Error{}, %{

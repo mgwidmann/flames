@@ -35,7 +35,7 @@ extractStyles: true
 # For example, _variables.scss contains:
 # $input-color: $gray !default;
 # This means you can define $input-color before we load _variables.scss
-# preBootstrapCustomizations: ./app/styles/bootstrap/pre-customizations.scss
+preBootstrapCustomizations: ./lib/web/static/css/_variables.scss
 
 # This gets loaded after bootstrap/variables is loaded and before bootstrap is loaded.
 # A good example of this is when you want to override a bootstrap variable to be based
@@ -49,7 +49,7 @@ extractStyles: true
 # this in bootstrapCustomizations to make the input height 10% bigger than the default calculation.
 # Thus you can leverage the default calculations.
 # $input-height: $input-height * 1.10;
-# bootstrapCustomizations: ./app/styles/bootstrap/customizations.scss
+# bootstrapCustomizations: ./lib/web/static/css/_variables.scss
 
 # Import your custom styles here. You have access to all the bootstrap variables. If you require
 # your sass files separately, you will not have access to the bootstrap variables, mixins, clases, etc.

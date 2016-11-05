@@ -54,7 +54,7 @@ export default class ResolveButton extends React.Component {
   render() {
     return (
       <div>
-        <Button bsStyle="danger" onClick={this.resolveClick.bind(this)}>Resolve</Button>
+        <Button bsStyle="danger" className="btn-xs" onClick={this.resolveClick.bind(this)}>Resolve</Button>
         {this.renderModal()}
       </div>
     );
