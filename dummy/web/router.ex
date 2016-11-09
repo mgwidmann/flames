@@ -14,6 +14,7 @@ defmodule Dummy.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", Dummy.RedirectController, :index
+    get "/test", Dummy.TestController, :index
 
     forward "/errors", Flames.Web
   end

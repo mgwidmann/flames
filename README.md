@@ -1,6 +1,6 @@
 # Flames [![hex.pm version](https://img.shields.io/hexpm/v/flames.svg)](https://hex.pm/packages/flames)
 
-
+![Example Dashboard](example.png)
 
 ## Installation
 
