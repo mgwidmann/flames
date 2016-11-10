@@ -27,7 +27,8 @@ The package can be installed as:
     ```elixir
     config :flames,
       repo: MyPhoenixApp.Repo,
-      endpoint: MyPhoenixApp.Endpoint
+      endpoint: MyPhoenixApp.Endpoint,
+      table: "errors" # Optional, defaults to "errors"
 
     config :logger,
       backends: [:console, Flames.Logger]
@@ -40,6 +41,7 @@ The package can be installed as:
     use Ecto.Migration
 
     def change do
+      # Make sure this table name matches the above configuration
       create table(:errors) do
         add :message, :text
         add :level, :string

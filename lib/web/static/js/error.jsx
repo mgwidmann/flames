@@ -23,7 +23,7 @@ class Error extends React.Component {
     if(module && func && file && line) {
       moduleLine = (
         <span>
-          <h5>{module}.{func}</h5>
+          <h5>{func}</h5>
           <h6>{file}:{line}</h6>
         </span>
       )
@@ -36,7 +36,7 @@ class Error extends React.Component {
           </div>
         </div>
         <div className="row">
-          <span>Last occurance: {incidents && incidents[0] && incidents[0].timestamp}</span>
+          <span>Last occurance: {incidents && incidents[0] && incidents[0].timestamp || this.state.error.timestamp}</span>
           {moduleLine}
           <pre>
             {this.state.error.message}

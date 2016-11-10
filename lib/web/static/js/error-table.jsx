@@ -76,7 +76,7 @@ class ErrorTable extends React.Component {
 
   renderFileInfo(error) {
     if (error.file && error.function) {
-      return <span>{`${error.file}:${error.function}`}</span>;
+      return <span>{`${error.file}:${error.line}`}</span>;
     } else {
       return (
         <span className="text-muted">
@@ -118,13 +118,21 @@ class ErrorTable extends React.Component {
   }
 
   render() {
+    let inner = null;
     if (this.state.loading){
-      return this.renderLoading();
+      inner = this.renderLoading();
     } else if (this.state.errors.length == 0) {
-      return this.renderEmpty();
+      inner = this.renderEmpty();
     } else {
-      return this.renderErrors();
+      inner = this.renderErrors();
     }
+    return (
+      <div className="row">
+        <div className="col-xs-12">
+          {inner}
+        </div>
+      </div>
+    )
   }
 
 }

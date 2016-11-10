@@ -60,6 +60,7 @@ defmodule Flames.Logger do
     Application.put_env(:logger, :flames, flames_config)
   end
 
+  @message_regex ~r/^\s*\((?<app>.*?)\) (?<file>.*?):(?<line>\d+): (?<fun>.*)$/m
   defp error_changeset(level, {Logger, msg, {date, {hour, min, sec, _ms}}, md}) do
     repo = Application.get_env(:flames, :repo)
     message = normalize_message(msg)
@@ -71,18 +72,26 @@ defmodule Flames.Logger do
         incidents: [%{message: message.full, timestamp: {date, {hour, min, sec}}} | Enum.map(e.incidents, &Map.from_struct/1)]
       })
     else
+      {file, fun, line} = analyze(message.full)
       Flames.Error.changeset(%Flames.Error{}, %{
         message: message.full,
         level: to_string(level),
         timestamp: {date, {hour, min, sec}},
         alive: Process.alive?(md[:pid]),
-        module: md[:module] && to_string(md[:module]),
-        function: message.fun || md[:function],
-        file: md[:file] |> file_string(),
-        line: md[:line],
+        module: md[:module] && to_string(md[:module]) || message.module,
+        function: md[:function] || fun,
+        file: md[:file] |> file_string() || file,
+        line: md[:line] || line,
         hash: hash,
         count: 1
       })
+    end
+  end
+
+  defp analyze(message) do
+    case Regex.named_captures(@message_regex, message) do
+      %{"file" => file, "line" => line, "fun" => fun} -> {file, fun, line}
+      nil -> {nil, nil, nil}
     end
   end
 
@@ -90,7 +99,7 @@ defmodule Flames.Logger do
     %{
       message: IO.chardata_to_string(message),
       stack: IO.chardata_to_string(stack),
-      fun: String.strip(fun) |> String.replace("Function: ", ""),
+      module: String.strip(fun) |> String.replace("Function: ", ""),
       args: args |> IO.chardata_to_string() |> String.strip() |> String.replace("Args: ", ""),
       full: IO.chardata_to_string(full_message)
     }
@@ -99,7 +108,7 @@ defmodule Flames.Logger do
     %{
       message: IO.chardata_to_string(message),
       stack: nil,
-      fun: nil,
+      module: nil,
       args: nil,
       full: IO.chardata_to_string(message)
     }

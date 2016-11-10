@@ -6,9 +6,7 @@ if Code.ensure_loaded?(Phoenix.Controller) do
 
     def index(conn, _params) do
       repo = Application.get_env(:flames, :repo)
-      endpoint = Application.get_env(:flames, :endpoint)
       errors = repo.all(from e in Flames.Error, order_by: [desc: e.id])
-      token = Phoenix.Token.sign(endpoint, "flames", "flames") # Sign the word "flames" with key "flames"
       render(conn, "index.json", errors: errors)
     end
 

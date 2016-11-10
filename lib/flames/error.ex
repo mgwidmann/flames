@@ -4,7 +4,8 @@ defmodule Flames.Error do
 
   @derive {Poison.Encoder, except: [:__meta__]}
 
-  schema "errors" do
+  @table Application.get_env(:flames, :table) || "errors"
+  schema @table do
     field :message, :string
     field :level, :string
     field :timestamp, Ecto.DateTime

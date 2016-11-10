@@ -2,6 +2,6 @@ defmodule Dummy.TestController do
   use Dummy.Web, :controller
 
   def index(conn, _) do
-    raise "Something happened"
+    %{non_existent_key: _value} = conn.assigns
   end
 end

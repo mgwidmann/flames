@@ -5,7 +5,7 @@ export default class Layout extends React.Component {
   search(event) {
     this.setState({search: $(event.target).val()});
   }
-  
+
   render() {
     return (
       <div>
@@ -21,11 +21,9 @@ export default class Layout extends React.Component {
             </form>
           </div>
         </nav>
-        <main className="container" role="main">
+        <main className="container-fluid" role="main">
           <div className="col-xs-12">
-            <div className="row">
-              {this.props.children}
-            </div>
+            {this.props.children}
           </div>
         </main>
       </div>
