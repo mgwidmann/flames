@@ -9,8 +9,7 @@ defmodule Flames.Logger do
         repo: MyApp.Repo,
         endpoint: MyApp.Endpoint \# (Optional, if using Phoenix)
   """
-  @repo Application.get_env(:flames, :repo) || raise(config_message)
-  @endpoint Application.get_env(:flames, :endpoint) || raise(config_message)
+  Application.get_env(:flames, :repo) || raise(config_message)
 
   def init(_) do
     {:ok, configure}
@@ -36,10 +35,11 @@ defmodule Flames.Logger do
   end
 
   def post_event(level, data) do
+    repo = Application.get_env(:flames, :repo)
     try do
       level
       |> error_changeset(data)
-      |> @repo.insert_or_update!()
+      |> repo.insert_or_update!()
       |> broadcast()
     rescue
       error -> Logger.error(Exception.format(:error, error), flames: false)
@@ -48,12 +48,10 @@ defmodule Flames.Logger do
     end
   end
 
-  if @endpoint do
-    defp broadcast(error) do
-      @endpoint.broadcast("errors", "error", error)
-    end
-  else
-    defp broadcast(error), do: error # No op
+  defp broadcast(error) do
+    endpoint = Application.get_env(:flames, :endpoint)
+    endpoint && endpoint.broadcast("errors", "error", error)
+    error
   end
 
   defp configure(options \\ []) do
@@ -63,9 +61,10 @@ defmodule Flames.Logger do
   end
 
   defp error_changeset(level, {Logger, msg, {date, {hour, min, sec, _ms}}, md}) do
+    repo = Application.get_env(:flames, :repo)
     message = normalize_message(msg)
     hash = hash(message.full)
-    if e = Flames.Error.find_reported(hash) |> @repo.one() do
+    if e = Flames.Error.find_reported(hash) |> repo.one() do
       e
       |> Flames.Error.recur_changeset(%{
         count: e.count + 1,
