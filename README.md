@@ -1,4 +1,4 @@
-# Flames [![hex.pm version](https://img.shields.io/hexpm/v/flames.svg)](https://hex.pm/packages/flames)
+# Flames [![hex.pm version](https://img.shields.io/hexpm/v/flames.svg)](https://hex.pm/packages/flames) [![Build Status](https://semaphoreci.com/api/v1/mgwidmann/flames/branches/master/badge.svg)](https://semaphoreci.com/mgwidmann/flames)
 
 ![Example Dashboard](example.png)
 
