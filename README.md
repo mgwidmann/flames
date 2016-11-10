@@ -10,7 +10,7 @@ The package can be installed as:
 
     ```elixir
     def deps do
-      [{:flames, "~> 0.1.0"}]
+      [{:flames, "~> 0.2.0"}]
     end
     ```
 
