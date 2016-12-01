@@ -45,7 +45,7 @@ The package can be installed as:
       create table(:errors) do
         add :message, :text
         add :level, :string
-        add :timestamp, :datetime
+        add :timestamp, :datetime # or :utc_datetime if you're using the latest ecto
         add :alive, :boolean
         add :module, :string
         add :function, :string
