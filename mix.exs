@@ -83,7 +83,8 @@ defmodule Flames.Mixfile do
   end
 
   defp aliases do
-    [publish: ["hex.publish", "hex.publish docs", "tag"],
+    [publish: ["build.assets", "hex.publish", "hex.publish docs", "tag"],
+     "build.assets": &npm_build/1,
      tag: &tag_release/1]
   end
 
@@ -91,5 +92,10 @@ defmodule Flames.Mixfile do
     Mix.shell.info "Tagging release as #{@version}"
     System.cmd("git", ["tag", "-a", "v#{@version}", "-m", "v#{@version}"])
     System.cmd("git", ["push", "--tags"])
+  end
+
+  defp npm_build(_) do
+    Mix.shell.info([IO.ANSI.cyan, "Building assets...", IO.ANSI.default_color])
+    System.cmd("npm", ["run", "build"])
   end
 end
