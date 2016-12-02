@@ -3,6 +3,6 @@ defmodule Dummy.RedirectController do
 
   def index(conn, _) do
     conn
-    |> redirect(to: "/errors")
+    |> redirect(to: "/deeply/nested/errors")
   end
 end
