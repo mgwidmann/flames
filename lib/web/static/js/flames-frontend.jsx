@@ -4,7 +4,10 @@ import {Socket} from "phoenix";
 import ErrorTable from './error-table.jsx';
 import Error from './error.jsx';
 import Layout from './layout.jsx';
-import { Router, Route, hashHistory, IndexRoute, withRouter } from 'react-router';
+import { Router, Route, useRouterHistory, IndexRoute, withRouter } from 'react-router';
+import { createHashHistory } from 'history';
+
+const appHistory = useRouterHistory(createHashHistory)({ queryKey: false })
 
 class Main extends React.Component {
   static contextTypes: {
@@ -29,7 +32,7 @@ class Main extends React.Component {
 }
 
 render(
-  <Router history={hashHistory}>
+  <Router history={appHistory}>
     <Route path="/" >
       <IndexRoute component={withRouter(Main)}/>
       <Route path="/errors/:id" component={Error} />
