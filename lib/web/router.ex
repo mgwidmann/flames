@@ -5,7 +5,7 @@ if Code.ensure_loaded?(Phoenix.Router) do
 
     use Phoenix.Router
 
-    def static_path(%Plug.Conn{script_name: script}, path), do: Path.join(script, "/") <> path
+    def static_path(%Plug.Conn{script_name: script}, path), do: "/" <> Enum.join(script, "/") <> path
 
     pipeline :browser do
       plug :accepts, ~w(html)

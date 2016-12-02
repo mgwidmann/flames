@@ -1,7 +1,7 @@
 defmodule Dummy.Endpoint do
   use Phoenix.Endpoint, otp_app: :dummy
 
-  socket "/errors/socket", Flames.UserSocket
+  socket "/deeply/nested/errors/socket", Flames.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #

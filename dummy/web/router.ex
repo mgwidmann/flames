@@ -16,7 +16,9 @@ defmodule Dummy.Router do
     get "/", Dummy.RedirectController, :index
     get "/test", Dummy.TestController, :index
 
-    forward "/errors", Flames.Web
+    scope "/deeply/nested" do
+      forward "/errors", Flames.Web
+    end
   end
 
   # Other scopes may use custom stacks.
