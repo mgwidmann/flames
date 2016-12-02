@@ -1,10 +1,11 @@
 defmodule Flames.Mixfile do
   use Mix.Project
 
+  @version "0.2.1"
   def project do
     [
       app: :flames,
-      version: "0.2.1",
+      version: @version,
       elixir: "~> 1.2",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: compilers(Mix.env),
@@ -14,7 +15,8 @@ defmodule Flames.Mixfile do
       source_url: "https://github.com/mgwidmann/flames",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
-      deps: deps
+      deps: deps,
+      aliases: aliases
     ]
   end
 
@@ -78,5 +80,16 @@ defmodule Flames.Mixfile do
         "Docs" => "http://hexdocs.pm/flames/"
       }
     ]
+  end
+
+  defp aliases do
+    [publish: ["hex.publish", "hex.publish docs", "tag"],
+     tag: &tag_release/1]
+  end
+
+  defp tag_release(_) do
+    Mix.shell.info "Tagging release as #{@version}"
+    System.cmd("git", ["tag", "-a", "v#{@version}", "-m", "v#{@version}"])
+    System.cmd("git", ["push", "--tags"])
   end
 end
