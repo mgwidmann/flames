@@ -95,11 +95,11 @@ defmodule Flames.Logger do
     end
   end
 
-  defp normalize_message(full_message = [message, stack, fun | args]) do
+  defp normalize_message(full_message = [message, stack, fun | args]) when is_binary(stack) or is_list(stack) do
     %{
       message: IO.chardata_to_string(message),
       stack: IO.chardata_to_string(stack),
-      module: String.strip(fun) |> String.replace("Function: ", ""),
+      module: fun |> IO.chardata_to_string() |> String.strip() |> String.replace("Function: ", ""),
       args: args |> IO.chardata_to_string() |> String.strip() |> String.replace("Args: ", ""),
       full: IO.chardata_to_string(full_message)
     }
@@ -114,15 +114,16 @@ defmodule Flames.Logger do
     }
   end
 
-  @cwd File.cwd! |> String.replace("flames", "")
   defp file_string(nil), do: nil
   defp file_string(file) when is_binary(file) do
     file
-    |> String.replace(@cwd, "")
-    |> String.split("/")
+    |> String.replace(File.cwd! |> String.replace("flames", ""), "")
+    |> String.split("/", trim: true)
     |> file_string()
     |> Enum.join("/")
   end
+  # Heroku
+  defp file_string(["tmp", build = "build_" <> _some_number | path]), do: file_string([build | path])
   defp file_string(["deps", lib | file]) do
     ["(#{lib}) " | file]
   end
@@ -131,7 +132,7 @@ defmodule Flames.Logger do
   end
   defp file_string(list), do: list
 
-  @args_regex ~r/Args: [.*?]/
+  @args_regex ~r/Args: \[.*?\]/
   @struct_regex ~r/%.*?{.*?}/
   @function_regex ~r/#Function<\d+\.\d+\/\d+ in .*?\/\d{1}>/
   @pid_regex ~r/#PID<\d+\.\d+\.\d+>/
