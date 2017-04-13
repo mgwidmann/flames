@@ -16,6 +16,7 @@ defmodule Flames.Error do
     field :line, :integer
     field :count, :integer
     field :hash, :string
+    field :resolved, :boolean, default: false
 
     embeds_many :incidents, Flames.Error.Incident
 
