@@ -2,30 +2,6 @@ defmodule Flames.Mixfile do
   use Mix.Project
 
   @version "0.2.3"
-  def project do
-    [
-      app: :flames,
-      version: @version,
-      elixir: "~> 1.2",
-      elixirc_paths: elixirc_paths(Mix.env),
-      compilers: compilers(Mix.env),
-      name: "flames",
-      description: description,
-      package: package,
-      source_url: "https://github.com/mgwidmann/flames",
-      build_embedded: Mix.env == :prod,
-      start_permanent: Mix.env == :prod,
-      deps: deps,
-      aliases: aliases
-    ]
-  end
-
-  def application do
-    [
-      applications: apps(Mix.env),
-      mod: {Flames, []}
-    ]
-  end
 
   # Specifies which paths to compile per environment
   defp elixirc_paths(:test), do: ["lib", "test/support"]
@@ -98,4 +74,31 @@ defmodule Flames.Mixfile do
     Mix.shell.info([IO.ANSI.cyan, "Building assets...", IO.ANSI.default_color])
     System.cmd("npm", ["run", "build"])
   end
+
+  def project do
+    [
+      app: :flames,
+      version: @version,
+      elixir: "~> 1.2",
+      elixirc_paths: elixirc_paths(Mix.env),
+      compilers: compilers(Mix.env),
+      name: "flames",
+      description: description,
+      package: package,
+#      source_url: "https://github.com/mgwidmann/flames",
+      source_url: "https://github.com/ciroque/flames",
+      build_embedded: Mix.env == :prod,
+      start_permanent: Mix.env == :prod,
+      deps: deps,
+      aliases: aliases
+    ]
+  end
+
+  def application do
+    [
+      applications: apps(Mix.env),
+      mod: {Flames, []}
+    ]
+  end
+
 end
