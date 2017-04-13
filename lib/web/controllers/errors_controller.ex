@@ -23,7 +23,9 @@ if Code.ensure_loaded?(Phoenix.Controller) do
     def delete(conn, %{"id" => error_id}) do
       repo = Application.get_env(:flames, :repo)
       error = repo.get!(Flames.Error, error_id)
-      repo.delete!(error)
+
+      changeset = Flames.Error.changeset(error, %{ resolved: true })
+      repo.update!(struct(error, changeset))
 
       send_resp(conn, :no_content, "")
     end
