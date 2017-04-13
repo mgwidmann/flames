@@ -53,6 +53,7 @@ The package can be installed as:
         add :line, :integer
         add :count, :integer
         add :hash, :string
+        add :resolved, :boolean, default: false
 
         add :incidents, :json
 
