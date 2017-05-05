@@ -12,7 +12,7 @@ defmodule Flames.Logger do
   Application.get_env(:flames, :repo) || raise(config_message)
 
   def init(_) do
-    {:ok, configure}
+    {:ok, configure()}
   end
 
   def handle_event({_level, gl, _event}, state) when node(gl) != node() do

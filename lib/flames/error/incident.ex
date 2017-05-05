@@ -8,7 +8,7 @@ defmodule Flames.Error.Incident do
     field :message, :string
     field :timestamp, Ecto.DateTime
 
-    timestamps
+    timestamps()
   end
 
   @required ~w(message timestamp)

@@ -19,7 +19,7 @@ defmodule Flames.Error do
 
     embeds_many :incidents, Flames.Error.Incident
 
-    timestamps
+    timestamps()
   end
 
   @required ~w(message timestamp alive hash count level)

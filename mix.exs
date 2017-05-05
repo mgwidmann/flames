@@ -10,13 +10,13 @@ defmodule Flames.Mixfile do
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: compilers(Mix.env),
       name: "flames",
-      description: description,
-      package: package,
+      description: description(),
+      package: package(),
       source_url: "https://github.com/mgwidmann/flames",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
-      deps: deps,
-      aliases: aliases
+      deps: deps(),
+      aliases: aliases()
     ]
   end
 
@@ -31,20 +31,20 @@ defmodule Flames.Mixfile do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_),     do: ["lib"]
 
-  defp apps(_), do: apps
+  defp apps(_), do: apps()
   defp apps do
     [:logger]
   end
 
   # Need phoenix compiler to compile our views.
   defp compilers(:test) do
-    [:phoenix | compilers]
+    [:phoenix | compilers()]
   end
   defp compilers(_) do
     if Code.ensure_loaded?(Phoenix.HTML) do
-      [:phoenix | compilers]
+      [:phoenix | compilers()]
     else
-      compilers
+      compilers()
     end
   end
   defp compilers do
@@ -55,8 +55,8 @@ defmodule Flames.Mixfile do
     [
       {:ecto, "~> 1.1 or ~> 2.0"},
       {:phoenix, "~> 1.1", optional: true},
-      {:ex_doc, "~> 0.14", only: [:docs, :dev]},
-      {:earmark, "~> 1.0", only: [:docs, :dev]},
+      {:ex_doc, "~> 0.15", only: [:docs, :dev]},
+      {:earmark, "~> 1.2", only: [:docs, :dev]},
       {:phoenix_ecto, "~> 2.0 or ~> 3.0", only: :test},
       {:phoenix_html, "~> 2.3", only: :test},
     ]
