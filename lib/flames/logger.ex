@@ -42,9 +42,13 @@ defmodule Flames.Logger do
       |> repo.insert_or_update!()
       |> broadcast()
     rescue
-      error -> Logger.error(Exception.format(:error, error), flames: false)
+      error ->
+        Logger.error(Exception.format(:error, error), flames: false)
+        {:error, error}
     catch
-      error -> Logger.error(error, flames: false)
+      error ->
+        Logger.error(error, flames: false)
+        {:error, error}
     end
   end
 

@@ -1,4 +1,4 @@
-defmodule Dummy.Repo.Migrations.AddFlames do
+defmodule TestRepo.Migrations.AddFlames do
   use Ecto.Migration
 
   def change do
@@ -16,7 +16,7 @@ defmodule Dummy.Repo.Migrations.AddFlames do
 
       add :incidents, :json
 
-      timestamps
+      timestamps()
     end
 
     create index(:errors, [:hash])

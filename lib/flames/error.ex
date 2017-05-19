@@ -22,17 +22,19 @@ defmodule Flames.Error do
     timestamps()
   end
 
-  @required ~w(message timestamp alive hash count level)
-  @optional ~w(module function file line)
+  @required ~w(message timestamp alive hash count level)a
+  @optional ~w(module function file line)a
 
   def changeset(model, params \\ %{}) do
     model
-    |> cast(params, @required, @optional)
+    |> cast(params, @required ++ @optional)
+    |> validate_required(@required)
   end
 
   def recur_changeset(model, params \\ %{}) do
     model
-    |> cast(params, @required, @optional)
+    |> cast(params, @required ++ @optional)
+    |> validate_required(@required)
     |> cast_embed(:incidents)
   end
 

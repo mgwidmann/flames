@@ -11,12 +11,13 @@ defmodule Flames.Error.Incident do
     timestamps()
   end
 
-  @required ~w(message timestamp)
-  @optional ~w()
+  @required ~w(message timestamp)a
+  @optional ~w()a
 
   def changeset(model, params \\ %{}) do
     model
-    |> cast(params, @required, @optional)
+    |> cast(params, @required ++ @optional)
+    |> validate_required(@required)
   end
 
 end

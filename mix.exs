@@ -23,18 +23,19 @@ defmodule Flames.Mixfile do
   def application do
     [
       applications: apps(Mix.env),
-      mod: {Flames, []}
+      mod: mod(Mix.env)
     ]
   end
+
+  defp mod(:test), do: {Flames.App, []}
+  defp mod(_env), do: {Flames, []}
 
   # Specifies which paths to compile per environment
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_),     do: ["lib"]
 
-  defp apps(_), do: apps()
-  defp apps do
-    [:logger]
-  end
+  defp apps(:test), do: apps(nil) ++ [:postgrex]
+  defp apps(_), do: [:logger]
 
   # Need phoenix compiler to compile our views.
   defp compilers(:test) do
@@ -59,6 +60,7 @@ defmodule Flames.Mixfile do
       {:earmark, "~> 1.2", only: [:docs, :dev]},
       {:phoenix_ecto, "~> 2.0 or ~> 3.0", only: :test},
       {:phoenix_html, "~> 2.3", only: :test},
+      {:postgrex, "~> 0.13.2", only: :test}
     ]
   end
 
