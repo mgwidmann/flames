@@ -1,7 +1,7 @@
 defmodule Flames.Mixfile do
   use Mix.Project
 
-  @version "0.2.5"
+  @version "0.2.6"
   def project do
     [
       app: :flames,
@@ -55,7 +55,7 @@ defmodule Flames.Mixfile do
   defp deps do
     [
       {:ecto, "~> 1.1 or ~> 2.0"},
-      {:phoenix, "~> 1.1 and < 1.4.0", optional: true},
+      {:phoenix, "~> 1.1 or ~> 1.3.0-rc and < 1.4.0", optional: true},
       {:ex_doc, "~> 0.15", only: [:docs, :dev]},
       {:earmark, "~> 1.2", only: [:docs, :dev]},
       {:phoenix_ecto, "~> 2.0 or ~> 3.0", only: :test},
