@@ -28,6 +28,15 @@ if Code.ensure_loaded?(Phoenix.Controller) do
       send_resp(conn, :no_content, "")
     end
 
+    def delete_batch(conn, %{"ids" => ids}) when is_list(ids) do
+      import Ecto.Query
+      repo = Application.get_env(:flames, :repo)
+      from(e in Flames.Error, where: e.id in ^ids)
+      |> repo.delete_all()
+
+      send_resp(conn, :no_content, "")
+    end
+
     def search(conn, %{"term" => term}) do
       results = term |> String.split(" ") # TODO: Finish
       conn |> json(%{results: results})

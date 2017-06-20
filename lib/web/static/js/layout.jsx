@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export default class Layout extends React.Component {
+export default class Layout extends Component {
 
   search(event) {
     this.setState({search: $(event.target).val()});

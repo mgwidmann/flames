@@ -25,7 +25,9 @@
   "dependencies": {
     "bootstrap": "^3.3.4",
     "jquery": "^3.0.0",
+    "moment": "^2.18.1",
     "phoenix": "file:deps/phoenix",
+    "prop-types": "^15.5.10",
     "react": "^15.1.0",
     "react-bootstrap": "^0.29.4",
     "react-dom": "^15.1.0",

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {Link} from 'react-router';
 import Layout from './layout.jsx';
+import ResolveButton from './resolve-button.jsx';
+import moment from 'moment';
 
-class Error extends React.Component {
+class Error extends Component {
 
   constructor(props) {
     super(props);
@@ -14,6 +16,10 @@ class Error extends React.Component {
     }).fail(()=>{
       this.setState({failure: true});
     });
+  }
+
+  incidentTimestamp(timestamp) {
+    return moment(timestamp).format('MMMM Do YYYY, h:mm:ss a');
   }
 
   render() {
@@ -30,13 +36,18 @@ class Error extends React.Component {
     }
     return (
       <Layout>
-        <div className="row">
+        <div className="row" id="error">
           <div className="col-xs-12">
-            <Link to="/">≪ Back</Link>
+            <Link to="/" className="btn">≪ Back</Link>
+            <div className="pull-right">
+              <ResolveButton className="btn-md" error={this.state.error} removeError={()=> { this.props.router.push('/'); } } />
+            </div>
           </div>
         </div>
         <div className="row">
-          <span>Last occurance: {incidents && incidents[0] && incidents[0].timestamp || this.state.error.timestamp}</span>
+          <span>
+            Last occurance: {this.incidentTimestamp(incidents && incidents[0] && incidents[0].timestamp || this.state.error.timestamp)}
+          </span>
           {moduleLine}
           <pre>
             {this.state.error.message}

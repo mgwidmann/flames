@@ -18,3 +18,6 @@ config :flames, TestRepo,
   hostname: "localhost",
   pool_size: 10,
   priv: "priv/repo"
+
+config :logger,
+  level: :info

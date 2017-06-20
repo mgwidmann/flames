@@ -26,6 +26,7 @@ if Code.ensure_loaded?(Phoenix.Router) do
 
       get "/errors", ErrorsController, :index
       get "/errors/:id", ErrorsController, :show
+      delete "/errors", ErrorsController, :delete_batch
       delete "/errors/:id", ErrorsController, :delete
       get "/errors/search", ErrorsController, :search
     end

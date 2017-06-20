@@ -17,6 +17,11 @@ var config = {
     filename: '/js/flames-frontend.js'
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': '"production"'
+      }
+    }),
     new ExtractTextPlugin('/css/flames-frontend.css', { allChunks: true }),
     new webpack.ProvidePlugin({
       $: "jquery",

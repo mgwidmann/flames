@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {Button, Modal} from 'react-bootstrap';
 
-export default class ResolveButton extends React.Component {
+export default class ResolveButton extends Component {
 
   constructor(props) {
     super(props);
@@ -23,7 +23,6 @@ export default class ResolveButton extends React.Component {
       this.props.removeError();
       this.close();
     });
-
   }
 
   close() {
@@ -44,17 +43,18 @@ export default class ResolveButton extends React.Component {
           </pre>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.close}>Close</Button>
-          <Button bsStyle="danger" onClick={resolve}>Resolve</Button>
+          <button className="btn" onClick={this.close}>Close</button>
+          <button className="btn btn-danger" onClick={resolve}>Resolve</button>
         </Modal.Footer>
       </Modal>
     );
   }
 
   render() {
+    let { className } = this.props;
     return (
       <div>
-        <Button bsStyle="danger" className="btn-xs" onClick={this.resolveClick.bind(this)}>Resolve</Button>
+        <button className={(className || "btn-xs") + " btn-danger"} onClick={this.resolveClick.bind(this)}>Resolve</button>
         {this.renderModal()}
       </div>
     );

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import _ from 'underscore';
 import ResolveButton from './resolve-button.jsx';
 import FlipMove from 'react-flip-move';
 
-class ErrorTable extends React.Component {
+class ErrorTable extends Component {
 
   constructor(props) {
     super(props);
@@ -21,7 +21,12 @@ class ErrorTable extends React.Component {
         this.setState({errors: [error].concat(errors)});
       }
     });
-    this.state = {channel: channel, errors: [], loading: true};
+    this.state = {channel: channel, errors: [], loading: true, selected: []};
+    this.loadErrors()
+  }
+
+  loadErrors() {
+    this.setState({loading: true});
     $.get({
       url: `${window.location.pathname}/api/errors`, dataType: 'json'
     }).done((data)=> {
@@ -54,6 +59,29 @@ class ErrorTable extends React.Component {
     }
   }
 
+  resolveAll() {
+    $.ajax({
+      url: `${window.location.pathname}/api/errors`,
+      dataType: 'json',
+      method: 'DELETE',
+      data: {
+        ids: this.state.selected
+      }
+    }).done(()=> {
+      this.setState({ selected: [] });
+      this.loadErrors();
+    });
+  }
+
+  selectError(event, error) {
+    event.stopPropagation();
+    if (event.target.checked) {
+      this.setState({selected: this.state.selected.concat(error.id) });
+    } else {
+      this.setState({selected: _.reject(this.state.selected, (id) => { id == error.id })});
+    }
+  }
+
   removeError(error) {
     var errors = _.reject(this.state.errors, (e) => { return e.id == error.id });
     this.setState({errors: errors});
@@ -67,8 +95,11 @@ class ErrorTable extends React.Component {
         <span className="col-xs-5 message">{error.message}</span>
         <span className="col-xs-3 file">{this.renderFileInfo(error)}</span>
         <span className="col-xs-1 count">{error.count}</span>
-        <span className="col-xs-2 resolve">
+        <span className="col-xs-1 resolve">
           <ResolveButton error={error} removeError={()=> { this.removeError(error) } } />
+        </span>
+        <span className="col-xs-1">
+          <input type="checkbox" onClick={(e) => { this.selectError(e, error) }}/>
         </span>
       </div>
     );
@@ -101,10 +132,31 @@ class ErrorTable extends React.Component {
 
   renderErrors() {
     return (
-      <div id="errors" className="table table-stripped table-hover">
-        <FlipMove enterAnimation="fade" leaveAnimation="fade" staggerDelayBy={50} duration={500} >
-          {_.filter(this.state.errors, this.matchesSearch.bind(this)).map(this.renderError.bind(this))}
-        </FlipMove>
+      <div>
+        <div className="row info-row">
+          <div className="col-xs-1">
+            <span className="table-header">Level</span>
+          </div>
+          <div className="col-xs-5">
+            <span className="table-header">Message</span>
+          </div>
+          <div className="col-xs-3">
+            <span className="table-header">File</span>
+          </div>
+          <div className="col-xs-1">
+            <span className="table-header">Count</span>
+          </div>
+          <div className='col-xs-2'>
+            <div className="pull-right">
+              <button onClick={this.resolveAll.bind(this)} className={`btn btn-danger ${_.isEmpty(this.state.selected) ? 'disabled' : ''}`}>Resolve All</button>
+            </div>
+          </div>
+        </div>
+        <div id="errors" className="table table-stripped table-hover">
+          <FlipMove enterAnimation="fade" leaveAnimation="fade" staggerDelayBy={50} duration={500} >
+            {_.filter(this.state.errors, this.matchesSearch.bind(this)).map(this.renderError.bind(this))}
+          </FlipMove>
+        </div>
       </div>
     );
   }

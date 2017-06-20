@@ -138,15 +138,23 @@ defmodule Flames.Logger do
 
   @args_regex ~r/Args: \[.*?\]/
   @struct_regex ~r/%.*?{.*?}/
+  @tuple_regex ~r/{.*?}/
   @function_regex ~r/#Function<\d+\.\d+\/\d+ in .*?\/\d{1}>/
   @pid_regex ~r/#PID<\d+\.\d+\.\d+>/
   @ref_regex ~r/#Reference<\d+\.\d+\.\d+\.\d+>/
-  @id_regex ~r/id: \d+/
+  @port_regex ~r/#Port<\d+\.\d+>/
+  @id_regex ~r/id: "?\d+"?/
+  @string_regex ~r/".*?"|'.*?'/
+  @number_regex ~r/\d+/
   @dates_regex ~r/#(Ecto\.)?DateTime<.*?>|#<DateTime(.*?)>/
-  @hash_ignore_regex ~r/#{@pid_regex.source}|#{@ref_regex.source}|#{@id_regex.source}|#{@dates_regex.source}|#{@function_regex.source}|#{@struct_regex.source}|#{@args_regex.source}/
+  @data_equals_regex ~r/Data == .*?\*\*/
+  @state_equals_regex ~r/State == .*?\*\*/
+  @hash_ignore_regex ~r/#{@state_equals_regex.source}|#{@data_equals_regex.source}|#{@pid_regex.source}|#{@ref_regex.source}|#{@port_regex.source}|#{@struct_regex.source}|#{@tuple_regex.source}|#{@id_regex.source}|#{@function_regex.source}|#{@args_regex.source}|#{@string_regex.source}|#{@number_regex.source}|#{@dates_regex.source}/
+  def hash_ignore_regex(), do: @hash_ignore_regex
+  def strip_variable_data(msg), do: msg |> String.replace(hash_ignore_regex(), "")
   def hash(list) when is_list(list), do: list |> hd |> hash
   def hash(msg) when is_binary(msg) do
-    msg = msg |> String.replace(@hash_ignore_regex, "")
+    msg = strip_variable_data(msg)
     :crypto.hash(:sha256, msg) |> Base.encode16
   end
 end
