@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {Link} from 'react-router';
 import Layout from './layout.jsx';
 import ResolveButton from './resolve-button.jsx';
-import moment from 'moment';
+import moment from 'moment-timezone';
+moment.tz.guess();
 
 class Error extends Component {
 

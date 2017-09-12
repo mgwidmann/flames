@@ -29,6 +29,9 @@ var config = {
       "window.jQuery": "jquery"
     })
   ],
+  resolve: {
+    extensions: ['', '.json', '.jsx', '.js']
+  },
   module: {
     loaders: [
       { test: /\.jsx?$/, loaders: ['babel'], include: path.join(__dirname, 'lib/web/static') },
@@ -38,6 +41,7 @@ var config = {
       { test: /\.jpg$/, loader: "file-loader" },
       { test: /\.(woff2?|svg)$/, loader: 'url?limit=10000' },
       { test: /\.(ttf|eot)$/, loader: 'file' },
+      { test: /\.json$/, loader: "json-loader" }
     ]
   }
 };

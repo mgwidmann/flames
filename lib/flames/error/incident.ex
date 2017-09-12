@@ -6,7 +6,7 @@ defmodule Flames.Error.Incident do
 
   embedded_schema do
     field :message, :string
-    field :timestamp, Ecto.DateTime
+    field :timestamp, :naive_datetime
 
     timestamps()
   end

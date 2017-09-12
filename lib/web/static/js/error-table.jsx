@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import _ from 'underscore';
 import ResolveButton from './resolve-button.jsx';
 import FlipMove from 'react-flip-move';
+import moment from 'moment-timezone';
+moment.tz.guess();
 
 class ErrorTable extends Component {
 
@@ -89,17 +91,20 @@ class ErrorTable extends Component {
 
   renderError(error) {
     let rowClick = ()=> { this.handleClick(error) };
+    let { incidents } = error;
+    let lastIncident = incidents && incidents[0] && incidents[0].timestamp || error.timestamp
+    let lastIncidentTimestamp = moment(lastIncident).format('MMMM Do YYYY, h:mm:ss a');
     return (
-      <div key={error.id} className={`${this.rowColor(error)} info-row error-row row`} onClick={rowClick}>
+      <div key={error.id} className={`${this.rowColor(error)} info-row error-row row`}>
         <span className="col-xs-1 level"><span className={`label ${this.levelColor(error)}`}>{error.level}</span></span>
-        <span className="col-xs-5 message">{error.message}</span>
-        <span className="col-xs-3 file">{this.renderFileInfo(error)}</span>
-        <span className="col-xs-1 count">{error.count}</span>
+        <span className="col-xs-5 message" onClick={rowClick}>{error.message}</span>
+        <span className="col-xs-3 file" onClick={rowClick}>{this.renderFileInfo(error)}</span>
+        <span className="col-xs-1 count" onClick={rowClick} title={lastIncidentTimestamp}>{error.count}</span>
         <span className="col-xs-1 resolve">
           <ResolveButton error={error} removeError={()=> { this.removeError(error) } } />
         </span>
-        <span className="col-xs-1">
-          <input type="checkbox" onClick={(e) => { this.selectError(e, error) }}/>
+        <span className="col-xs-1" onClick={(e) => { this.selectError(e, error) }}>
+          <input type="checkbox"/>
         </span>
       </div>
     );
@@ -153,7 +158,7 @@ class ErrorTable extends Component {
           </div>
         </div>
         <div id="errors" className="table table-stripped table-hover">
-          <FlipMove enterAnimation="fade" leaveAnimation="fade" staggerDelayBy={50} duration={500} >
+          <FlipMove enterAnimation="fade" leaveAnimation="fade" staggerDelayBy={10} duration={200} >
             {_.filter(this.state.errors, this.matchesSearch.bind(this)).map(this.renderError.bind(this))}
           </FlipMove>
         </div>
