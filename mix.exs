@@ -1,7 +1,7 @@
 defmodule Flames.Mixfile do
   use Mix.Project
 
-  @version "0.3.0"
+  @version "0.3.1"
   def project do
     [
       app: :flames,

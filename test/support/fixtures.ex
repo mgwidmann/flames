@@ -177,4 +177,16 @@ defmodule Fixtures do
     ** {:remote, :closed}
     """
   end
+
+  def with_pid_1() do
+    """
+    Postgrex.Protocol (#PID<0.343.0>) timed out because it was handshaking for longer than 15000ms
+    """
+  end
+
+  def with_pid_2() do
+    """
+    Postgrex.Protocol (#PID<0.344.0>) timed out because it was handshaking for longer than 15000ms
+    """
+  end
 end

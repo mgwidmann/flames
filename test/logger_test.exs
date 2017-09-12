@@ -1,6 +1,6 @@
 defmodule Flames.LoggerTest do
   use ExUnit.Case
-  alias Flames.Logger, as: LogHandler
+  alias Flames.Error.Worker, as: LogHandler
   alias Flames.Error
 
   describe "#post_event" do
@@ -23,10 +23,14 @@ defmodule Flames.LoggerTest do
     test "strips large data" do
       assert LogHandler.strip_variable_data(Fixtures.large_error) == LogHandler.strip_variable_data(Fixtures.large_error_stripped)
     end
+
+    test "similar messages produce the same hash" do
+      assert LogHandler.hash(Fixtures.with_pid_1()) == LogHandler.hash(Fixtures.with_pid_2())
+    end
   end
 
   def post_event(message \\ "zomg") do
-    LogHandler.post_event(:error,
+    LogHandler.handle_event(:error,
                           {Logger,
                           [message],
                           @datetime,
