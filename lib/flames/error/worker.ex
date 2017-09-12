@@ -7,7 +7,7 @@ defmodule Flames.Error.Worker do
   end
 
   def init(_) do
-    :ok
+    {:ok, nil}
   end
 
   def handle_cast({level, event}, _) do
