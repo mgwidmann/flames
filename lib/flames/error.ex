@@ -8,7 +8,7 @@ defmodule Flames.Error do
   schema @table do
     field :message, :string
     field :level, :string
-    field :timestamp, Ecto.DateTime
+    field :timestamp, :utc_datetime
     field :alive, :boolean
     field :module, :string
     field :function, :string
