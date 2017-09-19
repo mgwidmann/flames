@@ -48,18 +48,19 @@ defmodule Flames.Error.Worker do
     repo = Application.get_env(:flames, :repo)
     message = normalize_message(msg)
     hash = hash(message.full)
+    timestamp = NaiveDateTime.from_erl!({date, {hour, min, sec}}) |> DateTime.from_naive!("Etc/UTC")
     if e = Flames.Error.find_reported(hash) |> repo.one() do
       e
       |> Flames.Error.recur_changeset(%{
         count: e.count + 1,
-        incidents: [%{message: message.full, timestamp: {date, {hour, min, sec}}} | Enum.map(e.incidents, &Map.from_struct/1)]
+        incidents: [%{message: message.full, timestamp: timestamp} | Enum.map(e.incidents, &Map.from_struct/1)]
       })
     else
       {file, fun, line} = analyze(message.full)
       Flames.Error.changeset(%Flames.Error{}, %{
         message: message.full,
         level: to_string(level),
-        timestamp: {date, {hour, min, sec}},
+        timestamp: timestamp,
         alive: Process.alive?(md[:pid]),
         module: md[:module] && to_string(md[:module]) || message.module,
         function: md[:function] || fun,
