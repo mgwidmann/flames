@@ -20,6 +20,16 @@ if Code.ensure_loaded?(Phoenix.Controller) do
       render(conn, "show.json", error: error)
     end
 
+    def merge(conn, %{"ids" => ids}) do
+      import Ecto.Query
+      repo = Application.get_env(:flames, :repo)
+      [error | errors] = from(e in Flames.Error, where: e.id in ^ids) |> repo.all()
+      {:ok, _error} = Flames.Error.merge(error, errors) |> repo.update()
+      delete_ids = Enum.map(errors, &(&1.id))
+      repo.delete_all(from(e in Flames.Error, where: e.id in ^delete_ids))
+      send_resp(conn, :no_content, "")
+    end
+
     def delete(conn, %{"id" => error_id}) do
       repo = Application.get_env(:flames, :repo)
       error = repo.get!(Flames.Error, error_id)

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Button, Modal} from 'react-bootstrap';
+import { incidentTimestamp } from './helper.js';
 
 export default class ResolveButton extends Component {
 
@@ -7,6 +8,7 @@ export default class ResolveButton extends Component {
     super(props);
     this.state = {showModal: false};
     this.close = this.close.bind(this);
+    this.renderBody = this.renderBody.bind(this);
   }
 
   resolveClick(event) {
@@ -29,18 +31,41 @@ export default class ResolveButton extends Component {
     this.setState({showModal: false});
   }
 
+  renderBody() {
+    if (this.props.simple) {
+      return null;
+    } else {
+      return (
+        <pre>
+          {this.props.error.message}
+        </pre>
+      );
+    }
+  }
+
   renderModal() {
     let resolve = ()=> { this.resolve(this.props.error) };
+    const { incidents, module, line, file } = this.props.error;
+    const func = this.props.error['function'];
+    let moduleLine;
+    if(module && func && file && line) {
+      moduleLine = (
+        <span>
+          <h5>{func}</h5>
+          <h6>{file}:{line}</h6>
+        </span>
+      )
+    }
     return (
-      <Modal show={this.state.showModal} onHide={this.close}>
+      <Modal bsSize={this.props.simple ? "md" : "lg"} show={this.state.showModal} onHide={this.close}>
         <Modal.Header closeButton>
           <Modal.Title>Resolve Error</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <span>Are you sure you want to resolve this error?</span>
-          <pre>
-            {this.props.error.message}
-          </pre>
+          <div>Are you sure you want to resolve this error?</div>
+          Last occurance: {incidentTimestamp(incidents && incidents[0] && incidents[0].timestamp || this.props.error.timestamp)}
+          {moduleLine}
+          {this.renderBody()}
         </Modal.Body>
         <Modal.Footer>
           <button className="btn" onClick={this.close}>Close</button>

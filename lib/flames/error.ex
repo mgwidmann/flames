@@ -45,6 +45,16 @@ defmodule Flames.Error do
       limit: 1
   end
 
+  def merge(original, dups) do
+    counts = original.count + (dups |> Enum.map(&(&1.count)) |> Enum.sum())
+    incidents = [original.incidents, Enum.map(dups, &(&1.incidents))]
+                |> List.flatten()
+                |> Enum.sort_by(&(&1.timestamp))
+                |> Enum.reverse()
+                |> Enum.map(&Map.from_struct/1)
+    changeset(original, %{count: counts, incidents: incidents})
+  end
+
   def reported?(hash) when is_binary(hash) do
     import Ecto.Query
     from e in find_reported(hash), select: true

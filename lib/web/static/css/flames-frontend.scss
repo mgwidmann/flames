@@ -3,6 +3,12 @@
 #errors {
   .error-row {
     cursor: pointer;
+    &:nth-child(even) {
+      background-color: #4B4B4B;
+    }
+    &:hover {
+      background-color: #202020;
+    }
   }
   .message {
     overflow: hidden;
@@ -27,5 +33,10 @@ input[type=checkbox] {
 }
 
 .info-row {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.jumbotron.info-row {
   margin-top: 10px;
 }

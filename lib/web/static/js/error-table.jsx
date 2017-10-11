@@ -70,6 +70,20 @@ class ErrorTable extends Component {
         ids: this.state.selected
       }
     }).done(()=> {
+      let errors = _.reject(this.state.errors, (e) => { return this.state.selected.indexOf(e.id) >= 0 });
+      this.setState({ selected: [], errors: errors });
+    });
+  }
+
+  mergeAll() {
+    $.ajax({
+      url: `${window.location.pathname}/api/errors/merge`,
+      dataType: 'json',
+      method: 'POST',
+      data: {
+        ids: this.state.selected
+      }
+    }).done(()=> {
       this.setState({ selected: [] });
       this.loadErrors();
     });
@@ -77,10 +91,10 @@ class ErrorTable extends Component {
 
   selectError(event, error) {
     event.stopPropagation();
-    if (event.target.checked) {
-      this.setState({selected: this.state.selected.concat(error.id) });
+    if (this.state.selected.indexOf(error.id) >= 0) {
+      this.setState({selected: _.reject(this.state.selected, (id) => { return id == error.id; })});
     } else {
-      this.setState({selected: _.reject(this.state.selected, (id) => { id == error.id })});
+      this.setState({selected: this.state.selected.concat(error.id) });
     }
   }
 
@@ -104,7 +118,7 @@ class ErrorTable extends Component {
           <ResolveButton error={error} removeError={()=> { this.removeError(error) } } />
         </span>
         <span className="col-xs-1" onClick={(e) => { this.selectError(e, error) }}>
-          <input type="checkbox"/>
+          <input ref={(i) => { this[`_error_${error.id}`] = i; }} checked={this.state.selected.indexOf(error.id) >= 0} onClick={(e) => { this.selectError(e, error) }} type="checkbox"/>
         </span>
       </div>
     );
@@ -153,6 +167,8 @@ class ErrorTable extends Component {
           </div>
           <div className='col-xs-2'>
             <div className="pull-right">
+              <button onClick={this.mergeAll.bind(this)} className={`btn btn-warning ${_.isEmpty(this.state.selected) ? 'disabled' : ''}`}>Merge</button>
+              &nbsp;
               <button onClick={this.resolveAll.bind(this)} className={`btn btn-danger ${_.isEmpty(this.state.selected) ? 'disabled' : ''}`}>Resolve All</button>
             </div>
           </div>

@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import {Link} from 'react-router';
 import Layout from './layout.jsx';
 import ResolveButton from './resolve-button.jsx';
-import moment from 'moment-timezone';
-moment.tz.guess();
+import { incidentTimestamp } from './helper.js';
 
 class Error extends Component {
 
@@ -19,14 +18,10 @@ class Error extends Component {
     });
   }
 
-  incidentTimestamp(timestamp) {
-    return moment(timestamp).format('MMMM Do YYYY, h:mm:ss a');
-  }
-
   render() {
     const { incidents, module, line, file } = this.state.error;
     const func = this.state.error['function'];
-    let moduleLine = null;
+    let moduleLine;
     if(module && func && file && line) {
       moduleLine = (
         <span>
@@ -41,13 +36,13 @@ class Error extends Component {
           <div className="col-xs-12">
             <Link to="/" className="btn">≪ Back</Link>
             <div className="pull-right">
-              <ResolveButton className="btn-md" error={this.state.error} removeError={()=> { this.props.router.push('/'); } } />
+              <ResolveButton className="btn-md" simple error={this.state.error} removeError={()=> { this.props.router.push('/'); } } />
             </div>
           </div>
         </div>
         <div className="row">
           <span>
-            Last occurance: {this.incidentTimestamp(incidents && incidents[0] && incidents[0].timestamp || this.state.error.timestamp)}
+            Last occurance: {incidentTimestamp(incidents && incidents[0] && incidents[0].timestamp || this.state.error.timestamp)}
           </span>
           {moduleLine}
           <pre>
