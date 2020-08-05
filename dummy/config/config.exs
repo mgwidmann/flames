@@ -9,13 +9,14 @@ use Mix.Config
 config :dummy,
   ecto_repos: [Dummy.Repo]
 
+config :phoenix, :json_library, Jason
+
 # Configures the endpoint
 config :dummy, Dummy.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "ZVnGeeYrQPNlaKcFiNuO27s5558l/4IVudRBrALOWPCs96g5rce82S3NA+zPUy2a",
   render_errors: [view: Dummy.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Dummy.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Dummy.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -24,4 +25,4 @@ config :logger, :console,
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

@@ -1,20 +1,20 @@
 defmodule Flames.Mixfile do
   use Mix.Project
 
-  @version "0.3.2"
+  @version "0.4.0"
   def project do
     [
       app: :flames,
       version: @version,
       elixir: "~> 1.2",
-      elixirc_paths: elixirc_paths(Mix.env),
-      compilers: compilers(Mix.env),
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: compilers(Mix.env()),
       name: "flames",
       description: description(),
       package: package(),
       source_url: "https://github.com/mgwidmann/flames",
-      build_embedded: Mix.env == :prod,
-      start_permanent: Mix.env == :prod,
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases()
     ]
@@ -22,8 +22,8 @@ defmodule Flames.Mixfile do
 
   def application do
     [
-      applications: apps(Mix.env),
-      mod: mod(Mix.env)
+      extra_applications: apps(Mix.env()),
+      mod: mod(Mix.env())
     ]
   end
 
@@ -32,7 +32,7 @@ defmodule Flames.Mixfile do
 
   # Specifies which paths to compile per environment
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_), do: ["lib"]
 
   defp apps(:test), do: apps(nil) ++ [:postgrex]
   defp apps(_), do: [:logger]
@@ -41,6 +41,7 @@ defmodule Flames.Mixfile do
   defp compilers(:test) do
     [:phoenix | compilers()]
   end
+
   defp compilers(_) do
     if Code.ensure_loaded?(Phoenix.HTML) do
       [:phoenix | compilers()]
@@ -48,19 +49,21 @@ defmodule Flames.Mixfile do
       compilers()
     end
   end
+
   defp compilers do
-    Mix.compilers
+    Mix.compilers()
   end
 
   defp deps do
     [
-      {:ecto, "~> 1.1 or ~> 2.0"},
-      {:phoenix, "~> 1.1 or ~> 1.3.0 and < 1.4.0", optional: true},
-      {:ex_doc, "~> 0.15", only: [:docs, :dev]},
-      {:earmark, "~> 1.2", only: [:docs, :dev]},
-      {:phoenix_ecto, "~> 2.0 or ~> 3.0", only: :test},
-      {:phoenix_html, "~> 2.3", only: :test},
-      {:postgrex, "~> 0.13.2", only: :test}
+      {:ecto_sql, "~> 3.4"},
+      {:jason, "~> 1.2"},
+      {:phoenix, "~> 1.4.0 or ~> 1.5.0", optional: true},
+      {:ex_doc, "~> 0.22", only: [:docs, :dev]},
+      {:earmark, "~> 1.4", only: [:docs, :dev]},
+      {:phoenix_ecto, "~> 4.0", only: :test},
+      {:phoenix_html, "~> 2.14", only: :test},
+      {:postgrex, "~> 0.15", only: :test}
     ]
   end
 
@@ -85,19 +88,21 @@ defmodule Flames.Mixfile do
   end
 
   defp aliases do
-    [publish: ["build.assets", "hex.publish", "hex.publish docs", "tag"],
-     "build.assets": &npm_build/1,
-     tag: &tag_release/1]
+    [
+      publish: ["build.assets", "hex.publish", "hex.publish docs", "tag"],
+      "build.assets": &npm_build/1,
+      tag: &tag_release/1
+    ]
   end
 
   defp tag_release(_) do
-    Mix.shell.info "Tagging release as #{@version}"
+    Mix.shell().info("Tagging release as #{@version}")
     System.cmd("git", ["tag", "-a", "v#{@version}", "-m", "v#{@version}"])
     System.cmd("git", ["push", "--tags"])
   end
 
   defp npm_build(_) do
-    Mix.shell.info([IO.ANSI.cyan, "Building assets...", IO.ANSI.default_color])
+    Mix.shell().info([IO.ANSI.cyan(), "Building assets...", IO.ANSI.default_color()])
     System.cmd("npm", ["run", "build"])
   end
 end

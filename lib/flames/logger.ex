@@ -1,6 +1,6 @@
 defmodule Flames.Logger do
   require Logger
-  use GenEvent
+  @behaviour :gen_event
 
   config_message = """
   Please configure the repo Flames should use in your config.exs file.
@@ -9,12 +9,13 @@ defmodule Flames.Logger do
         repo: MyApp.Repo,
         endpoint: MyApp.Endpoint \# (Optional, if using Phoenix)
   """
+
   Application.get_env(:flames, :repo) || raise(config_message)
 
   def init(_) do
     {:ok, configure()}
   end
-  
+
   defp configure(options \\ []) do
     options = Keyword.merge(options, [])
     flames_config = Keyword.merge(Application.get_env(:logger, :flames, []), options)
@@ -27,9 +28,14 @@ defmodule Flames.Logger do
 
   def handle_event({level, _gl, event}, state) do
     if proceed?(event) && meet_level?(level) do
-      Flames.Error.Worker.post_event level, event
+      Flames.Error.Worker.post_event(level, event)
     end
+
     {:ok, state}
+  end
+
+  def handle_call(_, state) do
+    {:noreply, state}
   end
 
   defp proceed?({Logger, _msg, _event_time, meta}) do

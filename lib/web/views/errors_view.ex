@@ -29,4 +29,6 @@ if Code.ensure_loaded?(Phoenix.View) && Code.ensure_loaded?(Phoenix.HTML) do
       }
     end
   end
+else
+  IO.puts("Flames.ErrorsView: Flames not compiled with either Phoenix.View or Phoenix.HTML!")
 end

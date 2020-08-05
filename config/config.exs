@@ -9,6 +9,8 @@ config :flames,
 config :flames,
   ecto_repos: [TestRepo]
 
+config :phoenix, :json_library, Jason
+
 # Configure your database
 config :flames, TestRepo,
   adapter: Ecto.Adapters.Postgres,

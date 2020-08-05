@@ -3,11 +3,7 @@ if Code.ensure_loaded?(Phoenix.Socket) do
     use Phoenix.Socket
 
     ## Channels
-    channel "errors", Flames.ErrorChannel
-
-    ## Transports
-    transport :websocket, Phoenix.Transports.WebSocket
-    transport :longpoll, Phoenix.Transports.LongPoll
+    channel("errors", Flames.ErrorChannel)
 
     # Socket params are passed from the client and can
     # be used to verify and authenticate a user. After
@@ -23,7 +19,8 @@ if Code.ensure_loaded?(Phoenix.Socket) do
     @one_day 86400
     @endpoint Application.get_env(:flames, :endpoint)
     def connect(%{"token" => token}, socket) do
-      {:ok, "flames"} = Phoenix.Token.verify(@endpoint, "flames", token, max_age: @one_day) # Verify they hit the protected interface
+      # Verify they hit the protected interface
+      {:ok, "flames"} = Phoenix.Token.verify(@endpoint, "flames", token, max_age: @one_day)
       {:ok, socket}
     end
 
