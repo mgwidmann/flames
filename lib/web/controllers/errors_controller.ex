@@ -6,8 +6,8 @@ if Code.ensure_loaded?(Phoenix.Controller) do
 
     def index(conn, _params) do
       repo = Application.get_env(:flames, :repo)
-      errors = repo.all(from e in Flames.Error, order_by: [desc: e.id])
-      render(conn, "index.json", errors: errors)
+      errors = repo.all(from(e in Flames.Error, order_by: [desc: e.id]))
+      render(conn, "index.json", errors: errors, layout: false)
     end
 
     def interface(conn, _params) do
@@ -16,8 +16,8 @@ if Code.ensure_loaded?(Phoenix.Controller) do
 
     def show(conn, %{"id" => error_id}) do
       repo = Application.get_env(:flames, :repo)
-      error = repo.one(from e in Flames.Error, where: e.id == ^error_id, limit: 1)
-      render(conn, "show.json", error: error)
+      error = repo.one(from(e in Flames.Error, where: e.id == ^error_id, limit: 1))
+      render(conn, "show.json", error: error, layout: false)
     end
 
     def merge(conn, %{"ids" => ids}) do
@@ -25,7 +25,7 @@ if Code.ensure_loaded?(Phoenix.Controller) do
       repo = Application.get_env(:flames, :repo)
       [error | errors] = from(e in Flames.Error, where: e.id in ^ids) |> repo.all()
       {:ok, _error} = Flames.Error.merge(error, errors) |> repo.update()
-      delete_ids = Enum.map(errors, &(&1.id))
+      delete_ids = Enum.map(errors, & &1.id)
       repo.delete_all(from(e in Flames.Error, where: e.id in ^delete_ids))
       send_resp(conn, :no_content, "")
     end
@@ -41,6 +41,7 @@ if Code.ensure_loaded?(Phoenix.Controller) do
     def delete_batch(conn, %{"ids" => ids}) when is_list(ids) do
       import Ecto.Query
       repo = Application.get_env(:flames, :repo)
+
       from(e in Flames.Error, where: e.id in ^ids)
       |> repo.delete_all()
 
@@ -48,7 +49,8 @@ if Code.ensure_loaded?(Phoenix.Controller) do
     end
 
     def search(conn, %{"term" => term}) do
-      results = term |> String.split(" ") # TODO: Finish
+      # TODO: Finish
+      results = term |> String.split(" ")
       conn |> json(%{results: results})
     end
   end

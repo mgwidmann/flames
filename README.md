@@ -14,15 +14,7 @@ def deps do
 end
 ```
 
-  2. Ensure `flames` is started before your application:
-
-```elixir
-def application do
-  [applications: [:flames]]
-end
-```
-
-  3. Add configuration to tell `flames` what your repository and (optional) Phoenix Endpoint modules are as well as adding it as a Logger backend:
+  2. Add configuration to tell `flames` what your repository and (optional) Phoenix Endpoint modules are as well as adding it as a Logger backend:
 
 ```elixir
 config :flames,
@@ -34,7 +26,7 @@ config :logger,
   backends: [:console, Flames.Logger]
 ```
 
-  4. Add the following migration:
+  3. Add the following migration:
 
 ```elixir
 defmodule MyApp.Repo.Migrations.CreateFlamesTable do
@@ -65,7 +57,7 @@ defmodule MyApp.Repo.Migrations.CreateFlamesTable do
 end
 ```
 
-  5. (Optional) Add it to your Phoenix Router and Phoenix Endpoint for live updates:
+  4. (Optional) Add it to your Phoenix Router and Phoenix Endpoint for live updates:
 
   Router (You should place this under a secure pipeline and secure it yourself)
 ```elixir
