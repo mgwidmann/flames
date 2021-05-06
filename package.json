@@ -35,6 +35,6 @@
     "react-dom": "^15.1.0",
     "react-flip-move": "^2.4.0",
     "react-router": "^2.4.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.12.1"
   }
 }
