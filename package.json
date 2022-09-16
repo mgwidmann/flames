@@ -23,7 +23,7 @@
     "webpack": "^1.7.2"
   },
   "dependencies": {
-    "bootstrap": "^3.3.4",
+    "bootstrap": "^3.4.1",
     "jquery": "^3.0.0",
     "json-loader": "^0.5.7",
     "moment": "^2.18.1",
