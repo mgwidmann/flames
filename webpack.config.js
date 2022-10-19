@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 // var autoprefixer = require('autoprefixer');
 // require('bootstrap/css/bootstrap.css');
@@ -14,7 +14,7 @@ var config = {
   ],
   output: {
     path: BUILD_DIR,
-    filename: '/js/flames-frontend.js'
+    filename: './priv/static/js/flames-frontend.js'
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -22,7 +22,8 @@ var config = {
         'NODE_ENV': '"production"'
       }
     }),
-    new ExtractTextPlugin('/css/flames-frontend.css', { allChunks: true }),
+    new MiniCssExtractPlugin({ filename: './priv/static/css/flames-frontend.css' }),
+    // new ExtractTextPlugin('/css/flames-frontend.css', { allChunks: true }),
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery",
@@ -33,15 +34,15 @@ var config = {
     extensions: ['', '.json', '.jsx', '.js']
   },
   module: {
-    loaders: [
-      { test: /\.jsx?$/, loaders: ['babel'], include: path.join(__dirname, 'lib/web/static') },
-      { test: /\.css$/, loaders: [ 'style', 'css', 'postcss' ] },
-      { test: /\.scss$/, loaders: [ 'style', 'css', 'postcss', 'sass' ] },
-      { test: /\.png$/, loader: "url-loader?limit=100000" },
-      { test: /\.jpg$/, loader: "file-loader" },
-      { test: /\.(woff2?|svg)$/, loader: 'url?limit=10000' },
-      { test: /\.(ttf|eot)$/, loader: 'file' },
-      { test: /\.json$/, loader: "json-loader" }
+    rules: [
+      { test: /\.jsx?$/, use: [ { loader: 'babel-loader', options: { include: path.join(__dirname, 'lib/web/static') } } ] },
+      { test: /\.css$/, use: [ { loader: 'style-loader'}, { loader: 'css-loader' }, { loader: 'postcss-loader' } ] },
+      { test: /\.scss$/, use: [ { loader: 'style-loader' }, { loader: 'css-loader' }, { loader: 'postcss-loader' }, { loader: 'sass-loader' } ] },
+      { test: /\.png$/, use: [ { loader: "url-loader?limit=100000" } ] },
+      { test: /\.jpg$/, use: [ { loader: "file-loader" } ] },
+      { test: /\.(woff2?|svg)$/, use: [ { loader: 'url-loader?limit=10000' } ] },
+      { test: /\.(ttf|eot)$/, use: [ { loader: 'file-loader' } ] },
+      { test: /\.json$/, use: [ { loader: "json-loader" } ] }
     ]
   }
 };

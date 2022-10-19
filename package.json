@@ -2,39 +2,41 @@
   "name": "flames",
   "scripts": {
     "dev": "webpack -d --watch",
-    "build": "webpack -p"
+    "build": "webpack"
   },
   "devDependencies": {
-    "babel-core": "^5.1.11",
-    "babel-loader": "^5.0.0",
+    "@babel/core": "^7.19.3",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.2.5",
     "babel-preset-stage-0": "^6.5.0",
-    "bootstrap-loader": "^1.0.10",
-    "bootstrap-sass": "^3.3.6",
-    "css-loader": "^0.12.1",
-    "extract-text-webpack-plugin": "^1.0.1",
-    "file-loader": "^0.8.5",
-    "node-sass": "^4.5.3",
-    "postcss-loader": "^0.9.1",
-    "react-hot-loader": "^1.2.2",
-    "resolve-url-loader": "^1.4.3",
-    "sass-loader": "^3.2.0",
-    "style-loader": "^0.13.1",
-    "url-loader": "^0.5.7",
-    "webpack": "^1.7.2"
+    "bootstrap-loader": "^4.0.0",
+    "bootstrap-sass": "^3.4.3",
+    "css-loader": "^6.7.1",
+    "file-loader": "^6.2.0",
+    "mini-css-extract-plugin": "^2.6.1",
+    "node-sass": "^7.0.3",
+    "postcss-loader": "^7.0.1",
+    "react-hot-loader": "^4.13.0",
+    "resolve-url-loader": "^5.0.0",
+    "sass-loader": "^13.1.0",
+    "style-loader": "^3.3.1",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
   },
   "dependencies": {
     "bootstrap": "^3.3.4",
-    "jquery": "^3.0.0",
+    "jquery": "^3.6.1",
     "json-loader": "^0.5.7",
-    "moment": "^2.18.1",
-    "moment-timezone": "^0.5.13",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.38",
     "phoenix": "file:deps/phoenix",
-    "prop-types": "^15.5.10",
+    "prop-types": "^15.8.1",
     "react": "^15.1.0",
     "react-bootstrap": "^0.29.4",
     "react-dom": "^15.1.0",
     "react-flip-move": "^2.4.0",
     "react-router": "^2.4.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.13.6"
   }
 }
