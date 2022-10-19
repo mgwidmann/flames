@@ -27,7 +27,7 @@
     "jquery": "^3.0.0",
     "json-loader": "^0.5.7",
     "moment": "^2.18.1",
-    "moment-timezone": "^0.5.13",
+    "moment-timezone": "^0.5.35",
     "phoenix": "file:deps/phoenix",
     "prop-types": "^15.5.10",
     "react": "^15.1.0",
