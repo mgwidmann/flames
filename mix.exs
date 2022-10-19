@@ -58,7 +58,7 @@ defmodule Flames.Mixfile do
     [
       {:ecto_sql, "~> 3.4"},
       {:jason, "~> 1.2"},
-      {:phoenix, "~> 1.4.0 or ~> 1.5.0", optional: true},
+      {:phoenix, "~> 1.4.0 or ~> 1.5.0 or ~> 1.6.0", optional: true},
       {:ex_doc, "~> 0.22", only: [:docs, :dev]},
       {:earmark, "~> 1.4", only: [:docs, :dev]},
       {:phoenix_ecto, "~> 4.0", only: :test},
