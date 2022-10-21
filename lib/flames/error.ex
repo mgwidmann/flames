@@ -4,7 +4,7 @@ defmodule Flames.Error do
 
   @derive {Jason.Encoder, except: [:__meta__]}
 
-  @table Application.get_env(:flames, :table) || "errors"
+  @table Application.compile_env(:flames, :table) || "errors"
   schema @table do
     field(:message, :string)
     field(:level, :string)

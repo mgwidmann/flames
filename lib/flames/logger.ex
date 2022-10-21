@@ -10,7 +10,7 @@ defmodule Flames.Logger do
         endpoint: MyApp.Endpoint \# (Optional, if using Phoenix)
   """
 
-  Application.get_env(:flames, :repo) || raise(config_message)
+  Application.compile_env(:flames, :repo) || raise(config_message)
 
   def init(_) do
     {:ok, configure()}
@@ -35,7 +35,7 @@ defmodule Flames.Logger do
   end
 
   def handle_call(_, state) do
-    {:noreply, state}
+    {:ok, nil, state}
   end
 
   defp proceed?({Logger, _msg, _event_time, meta}) do

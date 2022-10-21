@@ -17,7 +17,7 @@ if Code.ensure_loaded?(Phoenix.Socket) do
     # See `Phoenix.Token` documentation for examples in
     # performing token verification on connect.
     @one_day 86400
-    @endpoint Application.get_env(:flames, :endpoint)
+    @endpoint Application.compile_env(:flames, :endpoint)
     def connect(%{"token" => token}, socket) do
       # Verify they hit the protected interface
       {:ok, "flames"} = Phoenix.Token.verify(@endpoint, "flames", token, max_age: @one_day)

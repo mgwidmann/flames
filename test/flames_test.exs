@@ -1,4 +1,4 @@
 defmodule FlamesTest do
   use ExUnit.Case
-  doctest Flames
+  doctest Flames.Supervisor
 end

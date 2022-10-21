@@ -28,7 +28,7 @@ defmodule Flames.Mixfile do
   end
 
   defp mod(:test), do: {Flames.App, []}
-  defp mod(_env), do: {Flames, []}
+  defp mod(_env), do: []
 
   # Specifies which paths to compile per environment
   defp elixirc_paths(:test), do: ["lib", "test/support"]
