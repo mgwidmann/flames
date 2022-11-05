@@ -59,7 +59,8 @@ config :dummy, DummyWeb.Endpoint,
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/dummy_web/(live|views)/.*(ex)$",
-      ~r"lib/dummy_web/templates/.*(eex)$"
+      ~r"lib/dummy_web/templates/.*(eex)$",
+      ~r"../lib/flames_web/dashboard/.*(ex)$"
     ]
   ]
 

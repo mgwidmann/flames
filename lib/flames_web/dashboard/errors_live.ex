@@ -12,13 +12,21 @@ defmodule Flames.Dashboard.ErrorsLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <header class="d-flex">
-      <div id="menu" class="container d-flex flex-column">
-        <h1>Flames Dashboard</h1>
-        <div id="nav-dropdowns"></div>
+    <header class="d-flex container mx-auto mx-auto">
+      <div id="logo" class="d-flex flex-column">
+        <span class="fire">F</span>
+        <span class="burn">l</span>
+        <span class="burn">a</span>
+        <span class="burn">m</span>
+        <span class="burn">e</span>
+        <span class="fire">s</span>
       </div>
     </header>
-    <section id="main" role="main" class="container"></section>
+    <section id="main" role="main" class="container mx-auto">
+      <div class="p-6 mx-auto bg-gradient-to-t from-slate-100 to-slate-300 rounded-xl shadow-lg flex items-center space-x-4">
+        123123
+      </div>
+    </section>
     """
   end
 
