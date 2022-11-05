@@ -145,13 +145,7 @@ defmodule Flames.Error.Worker do
   @dates_regex ~r/#(Ecto\.)?DateTime<.*?>|#<DateTime(.*?)>/
   @data_equals_regex ~r/Data == .*?\*\*/
   @state_equals_regex ~r/State == .*?\*\*/
-  @hash_ignore_regex ~r/#{@state_equals_regex.source}|#{@data_equals_regex.source}|#{
-                       @pid_regex.source
-                     }|#{@ref_regex.source}|#{@port_regex.source}|#{@struct_regex.source}|#{
-                       @tuple_regex.source
-                     }|#{@id_regex.source}|#{@function_regex.source}|#{@args_regex.source}|#{
-                       @string_regex.source
-                     }|#{@number_regex.source}|#{@dates_regex.source}/
+  @hash_ignore_regex ~r/#{@state_equals_regex.source}|#{@data_equals_regex.source}|#{@pid_regex.source}|#{@ref_regex.source}|#{@port_regex.source}|#{@struct_regex.source}|#{@tuple_regex.source}|#{@id_regex.source}|#{@function_regex.source}|#{@args_regex.source}|#{@string_regex.source}|#{@number_regex.source}|#{@dates_regex.source}/
   def hash_ignore_regex(), do: @hash_ignore_regex
   def strip_variable_data(msg), do: msg |> String.replace(hash_ignore_regex(), "")
   def hash(list) when is_list(list), do: list |> hd |> hash

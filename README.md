@@ -10,7 +10,7 @@ The package can be installed as:
 
 ```elixir
 def deps do
-  [{:flames, "~> 0.4.0"}]
+  [{:flames, "~> 0.7"}]
 end
 ```
 
@@ -26,7 +26,7 @@ config :logger,
   backends: [:console, Flames.Logger]
 ```
 
-  3. Add the following migration:
+  3. Add the following migration. Run `mix ecto.gen.migration create_flames_table` to generate a migration file:
 
 ```elixir
 defmodule MyApp.Repo.Migrations.CreateFlamesTable do
@@ -37,7 +37,7 @@ defmodule MyApp.Repo.Migrations.CreateFlamesTable do
     create table(:errors) do
       add :message, :text
       add :level, :string
-      add :timestamp, :datetime # or :utc_datetime if you're using the latest ecto
+      add :timestamp, :utc_datetime
       add :alive, :boolean
       add :module, :string
       add :function, :string
@@ -57,16 +57,24 @@ defmodule MyApp.Repo.Migrations.CreateFlamesTable do
 end
 ```
 
-  4. (Optional) Add it to your Phoenix Router and Phoenix Endpoint for live updates:
+Run `mix ecto.migrate` to migrate the database.
+
+  4. Add `import Flames.Router` and `flames "/errors"` to your Phoenix Router for live updates:
 
   Router (You should place this under a secure pipeline and secure it yourself)
+  
 ```elixir
-forward "/errors", Flames.Web
-```
+defmodule MyAppWeb.Router do
+  use Phoenix.Router
+  import Flames.Router # <--- Add this here
 
-  Endpoint (Make sure this is the full path, adding `/socket` to the end)
-```elixir
-socket "/errors/socket", Flames.UserSocket
+  scope "/admin", MyAppWeb do
+    # Define require_admin plug to ensure public users cannot get here
+    pipe_through [:browser, :require_admin]
+
+    flames "/errors" # <--- Add this here
+  end
+end
 ```
 
 

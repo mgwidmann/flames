@@ -1,3 +1,0 @@
-<div id="app">
-</div>
-<script src="<%= Flames.Router.static_path(@conn, "/js/flames-frontend.js") %>"></script>

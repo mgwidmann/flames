@@ -17,11 +17,13 @@ defmodule Flames.LoggerTest do
 
   describe "#hash" do
     test "ignores maps" do
-      assert LogHandler.hash(Fixtures.error_with_map_data_1) == LogHandler.hash(Fixtures.error_with_map_data_2)
+      assert LogHandler.hash(Fixtures.error_with_map_data_1()) ==
+               LogHandler.hash(Fixtures.error_with_map_data_2())
     end
 
     test "strips large data" do
-      assert LogHandler.strip_variable_data(Fixtures.large_error) == LogHandler.strip_variable_data(Fixtures.large_error_stripped)
+      assert LogHandler.strip_variable_data(Fixtures.large_error()) ==
+               LogHandler.strip_variable_data(Fixtures.large_error_stripped())
     end
 
     test "similar messages produce the same hash" do
@@ -30,11 +32,10 @@ defmodule Flames.LoggerTest do
   end
 
   def post_event(message \\ "zomg") do
-    LogHandler.handle_event(:error,
-                          {Logger,
-                          [message],
-                          @datetime,
-                          pid: self(), module: __MODULE__, fun: :some_fun, file: "somefile.ex", line: 12})
+    LogHandler.handle_event(
+      :error,
+      {Logger, [message], @datetime,
+       pid: self(), module: __MODULE__, fun: :some_fun, file: "somefile.ex", line: 12}
+    )
   end
-
 end

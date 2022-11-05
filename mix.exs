@@ -1,7 +1,7 @@
 defmodule Flames.Mixfile do
   use Mix.Project
 
-  @version "0.6.0"
+  @version "0.7.0"
   def project do
     [
       app: :flames,
@@ -58,12 +58,15 @@ defmodule Flames.Mixfile do
     [
       {:ecto_sql, "~> 3.4"},
       {:jason, "~> 1.4"},
-      {:phoenix, "~> 1.4.0 or ~> 1.5.0 or ~> 1.6.0", optional: true},
+      {:phoenix, "~> 1.6"},
+      {:phoenix_live_view, "~> 0.18"},
+      {:phoenix_ecto, "~> 4.4"},
+      {:phoenix_html, "~> 3.1"},
+      {:postgrex, "~> 0.15", only: :test},
       {:ex_doc, "~> 0.22", only: [:docs, :dev]},
       {:earmark, "~> 1.4", only: [:docs, :dev]},
-      {:phoenix_ecto, "~> 4.0", only: :test},
-      {:phoenix_html, "~> 2.14", only: :test},
-      {:postgrex, "~> 0.15", only: :test}
+      {:esbuild, "~> 0.5", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.1.8", runtime: Mix.env() == :dev}
     ]
   end
 
@@ -89,8 +92,9 @@ defmodule Flames.Mixfile do
 
   defp aliases do
     [
-      publish: ["build.assets", "hex.publish", "hex.publish docs", "tag"],
+      publish: ["assets.deploy", "hex.publish", "hex.publish docs", "tag"],
       "build.assets": &npm_build/1,
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify"],
       tag: &tag_release/1
     ]
   end

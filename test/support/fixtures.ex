@@ -1,5 +1,4 @@
 defmodule Fixtures do
-
   def error_with_map_data_1() do
     """
     Task #PID<0.2136.0> started from #PID<0.2135.0> terminating
@@ -100,7 +99,9 @@ defmodule Fixtures do
      , true, }
     ** Reason for termination =
     **#{" "}
-    """ # Space at end is on purpose
+    """
+
+    # Space at end is on purpose
   end
 
   def large_error() do
