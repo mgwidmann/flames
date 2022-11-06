@@ -1,6 +1,7 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+@import "tailwindcss/line-clamp";
 @import "../vendor/nprogress.css";
 
 #logo span {
