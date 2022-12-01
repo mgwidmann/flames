@@ -39,15 +39,11 @@ defmodule Flames.Mixfile do
 
   # Need phoenix compiler to compile our views.
   defp compilers(:test) do
-    [:phoenix | compilers()]
+    [compilers()]
   end
 
   defp compilers(_) do
-    if Code.ensure_loaded?(Phoenix.HTML) do
-      [:phoenix | compilers()]
-    else
-      compilers()
-    end
+    compilers()
   end
 
   defp compilers do
@@ -66,7 +62,8 @@ defmodule Flames.Mixfile do
       {:ex_doc, "~> 0.22", only: [:docs, :dev]},
       {:earmark, "~> 1.4", only: [:docs, :dev]},
       {:esbuild, "~> 0.5", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.1.8", runtime: Mix.env() == :dev}
+      {:tailwind, "~> 0.1.8", runtime: Mix.env() == :dev},
+      {:heroicons, "~> 0.5"}
     ]
   end
 

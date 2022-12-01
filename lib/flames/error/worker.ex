@@ -15,8 +15,31 @@ defmodule Flames.Error.Worker do
     {:noreply, nil}
   end
 
+  @application_start """
+
+    def start(_type, _args) do
+      children = [
+        # ...
+        MyApplication.Repo,
+        Flames.Supervisor # <-- Add this as the first entry after your Repo
+        # ...,
+      ]
+
+      opts = [strategy: :one_for_one, name: KartVids.Supervisor]
+      Supervisor.start_link(children, opts)
+    end
+
+  """
+
   def post_event(level, event) do
-    GenServer.cast(__MODULE__, {level, event})
+    if Process.whereis(__MODULE__) != nil do
+      GenServer.cast(__MODULE__, {level, event})
+    else
+      Logger.warn(
+        "Flames worker not started! Please add the following to your application.ex start function: \n#{@application_start}",
+        flames: false
+      )
+    end
   end
 
   def handle_event(level, data) do
@@ -38,9 +61,31 @@ defmodule Flames.Error.Worker do
     end
   end
 
+  @endpoint_config """
+
+      config :flames,endpoint: MyApplicationWeb.Endpoint
+
+  """
+
   defp broadcast(error) do
     endpoint = Application.get_env(:flames, :endpoint)
-    endpoint && endpoint.broadcast("errors", "error", error)
+
+    if endpoint == nil do
+      Logger.warn(
+        "Flames not configured with endpoint in order to provide live updates! Please add the following configuration to your config.exs or similar: \n#{@endpoint_config}",
+        flames: false
+      )
+    else
+      if function_exported?(endpoint, :broadcast, 3) do
+        endpoint.broadcast("errors", "error", error)
+      else
+        Logger.error(
+          "Flames unable to broadcast errors because configured module from Application.get_env(:flames, :endpoint) does not export a broadcast/3 function! Endpoint module: #{inspect(endpoint)}",
+          flames: false
+        )
+      end
+    end
+
     error
   end
 

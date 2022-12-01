@@ -12,12 +12,30 @@
     <style nonce={csp_nonce(@conn, :style)}>
       <%= raw(render("app.css", %{})) %>
     </style>
-    <link href='https://fonts.googleapis.com/css?family=Caesar+Dressing' rel='stylesheet' type='text/css'>
+    <link
+      href="https://fonts.googleapis.com/css?family=Caesar+Dressing"
+      rel="stylesheet"
+      type="text/css"
+    />
   </head>
   <body class="bg-gradient-to-b bg-fixed from-orange-500 to-orange-800 h-screen">
     <div class="d-flex flex-column align-items-stretch layout-wrapper">
       <div class="flex-grow-1">
-        <%= @inner_content %>
+        <header class="d-flex container mx-auto mx-auto">
+          <div id="logo" class="d-flex flex-column">
+            <span class="fire">F</span>
+            <span class="burn">l</span>
+            <span class="burn">a</span>
+            <span class="burn">m</span>
+            <span class="burn">e</span>
+            <span class="fire">s</span>
+          </div>
+        </header>
+        <section id="main" role="main" class="container mx-auto pb-48">
+          <div class="mx-2 p-2 sm:mx-auto bg-gradient-to-t from-slate-300 to-slate-100 rounded-xl shadow-lg flex items-center space-x-4 pb-6">
+            <%= @inner_content %>
+          </div>
+        </section>
       </div>
       <footer class="flex-shrink-0"></footer>
     </div>

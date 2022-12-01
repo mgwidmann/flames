@@ -37,6 +37,9 @@ defmodule Flames.Web do
       # Import convenience functions for LiveView rendering
       import Phoenix.LiveView.Helpers
 
+      # Shortcut for generating JS commands
+      alias Phoenix.LiveView.JS
+
       # Import dashboard built-in functions
       import Flames.Dashboard.Helpers
     end

@@ -69,7 +69,7 @@ defmodule Flames.Router do
               csp_nonce_assign_key: csp_nonce_assign_key
             }
 
-          live "/:error", Flames.Dashboard.ErrorsLive, :error,
+          live "/:error", Flames.Dashboard.ShowErrorLive, :error,
             as: :flames,
             private: %{
               live_socket_path: live_socket_path,

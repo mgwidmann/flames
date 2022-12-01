@@ -20,6 +20,7 @@ end
 config :flames,
   repo: MyPhoenixApp.Repo,
   endpoint: MyPhoenixApp.Endpoint,
+  timezone: "America/New_York",
   table: "errors" # Optional, defaults to "errors"
 
 config :logger,
@@ -48,7 +49,7 @@ defmodule MyApp.Repo.Migrations.CreateFlamesTable do
 
       add :incidents, :json
 
-      timestamps
+      timestamps()
     end
 
     create index(:errors, [:hash])
