@@ -89,20 +89,6 @@ defmodule Flames.Dashboard.ShowErrorLive do
     {:noreply, push_navigate(socket, to: socket.assigns.basepath)}
   end
 
-  def last_incident_timestamp(%Flames.Error{
-        incidents: [%Flames.Error.Incident{timestamp: timestamp} | _]
-      }) do
-    display_timestamp(timestamp)
-  end
-
-  def last_incident_timestamp(%Flames.Error{timestamp: timestamp}) do
-    display_timestamp(timestamp)
-  end
-
-  def last_incident_timestamp(_error) do
-    "(Unknown)"
-  end
-
   def display_message(message) do
     message
     |> String.replace("\\n", "\n", global: true)

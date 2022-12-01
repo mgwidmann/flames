@@ -16,6 +16,8 @@ defmodule Flames.Dashboard.ErrorsLive do
   def handle_params(_params, url, socket) do
     uri = URI.parse(url)
 
+    Errors.subscribe()
+
     {
       :noreply,
       socket
@@ -38,6 +40,9 @@ defmodule Flames.Dashboard.ErrorsLive do
             </div>
             <div class="table-cell text-left sticky top-[-10px] bg-slate-100 text-sm font-medium text-gray-900 px-6 py-4">
               Count
+            </div>
+            <div class="table-cell text-left sticky top-[-10px] bg-slate-100 text-sm font-medium text-gray-900 px-6 py-4">
+              Last
             </div>
             <div class="table-cell text-left sticky top-[-10px] bg-slate-100 text-sm font-medium text-gray-900 px-6 py-4">
               Error
@@ -73,6 +78,9 @@ defmodule Flames.Dashboard.ErrorsLive do
             <div class="lg:table-cell text-sm text-gray-900 font-light text-center px-3 py-2">
               <%= error.count %>
             </div>
+            <div class="lg:table-cell text-sm text-gray-900 font-light text-center px-3 py-2">
+              <%= last_incident_timestamp(error) %>
+            </div>
             <div class="lg:table-cell text-sm text-gray-900 font-light px-3 py-2">
               <%= error.message |> String.slice(0, 250) |> String.trim_trailing() %>
               <%= if String.length(error.message) > 250 do %>
@@ -93,6 +101,13 @@ defmodule Flames.Dashboard.ErrorsLive do
   def handle_event("resolve", %{"id" => id}, socket) do
     Errors.resolve(id)
 
+    {:noreply, assign(socket, errors: Errors.list())}
+  end
+
+  @impl true
+  @spec handle_info(Phoenix.Socket.Broadcast.t(), Phoenix.LiveView.Socket.t()) ::
+          {:noreply, Phoenix.LiveView.Socket.t()}
+  def handle_info(%Phoenix.Socket.Broadcast{event: "error", payload: _error}, socket) do
     {:noreply, assign(socket, errors: Errors.list())}
   end
 end

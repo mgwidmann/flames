@@ -67,6 +67,8 @@ defmodule Flames.Error.Worker do
 
   """
 
+  def broadcast_topic(), do: "errors"
+
   defp broadcast(error) do
     endpoint = Application.get_env(:flames, :endpoint)
 
@@ -77,7 +79,7 @@ defmodule Flames.Error.Worker do
       )
     else
       if function_exported?(endpoint, :broadcast, 3) do
-        endpoint.broadcast("errors", "error", error)
+        endpoint.broadcast(broadcast_topic(), "error", error)
       else
         Logger.error(
           "Flames unable to broadcast errors because configured module from Application.get_env(:flames, :endpoint) does not export a broadcast/3 function! Endpoint module: #{inspect(endpoint)}",
