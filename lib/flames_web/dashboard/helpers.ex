@@ -1,8 +1,6 @@
 defmodule Flames.Dashboard.Helpers do
   use Phoenix.Component
 
-  alias Phoenix.LiveView.JS
-
   attr :type, :string, default: nil
   attr :class, :string, default: nil
   attr :rest, :global, include: ~w(disabled form name value)
