@@ -49,7 +49,8 @@ defmodule Flames.Dashboard.Helpers do
     timezone = Application.get_env(:flames, :timezone, "Etc/UTC")
 
     timestamp
-    |> DateTime.from_naive!(timezone)
+    |> DateTime.from_naive!("Etc/UTC")
+    |> DateTime.shift_zone!(timezone)
     |> Calendar.strftime("%a %b %d, %Y %I:%M %p")
   end
 

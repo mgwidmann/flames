@@ -38,10 +38,6 @@ defmodule Flames.Mixfile do
   defp apps(_), do: [:logger]
 
   # Need phoenix compiler to compile our views.
-  defp compilers(:test) do
-    [compilers()]
-  end
-
   defp compilers(_) do
     compilers()
   end
