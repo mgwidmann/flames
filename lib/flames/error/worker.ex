@@ -35,7 +35,7 @@ defmodule Flames.Error.Worker do
     if Process.whereis(__MODULE__) != nil do
       GenServer.cast(__MODULE__, {level, event})
     else
-      Logger.warn(
+      Logger.warning(
         "Flames worker not started! Please add the following to your application.ex start function: \n#{@application_start}",
         flames: false
       )
@@ -73,7 +73,7 @@ defmodule Flames.Error.Worker do
     endpoint = Application.get_env(:flames, :endpoint)
 
     if endpoint == nil do
-      Logger.warn(
+      Logger.warning(
         "Flames not configured with endpoint in order to provide live updates! Please add the following configuration to your config.exs or similar: \n#{@endpoint_config}",
         flames: false
       )

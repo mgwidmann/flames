@@ -37,6 +37,7 @@ defmodule Flames.Dashboard.Helpers do
 
   def color_for_level("error"), do: "bg-rose-600"
   def color_for_level("warn"), do: "bg-amber-400"
+  def color_for_level("warning"), do: "bg-amber-400"
   def color_for_level(_other), do: "bg-gradient-to-r from-amber-400 to-rose-600"
 
   def display_timestamp(%DateTime{} = timestamp) do

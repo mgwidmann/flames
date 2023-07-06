@@ -1,12 +1,12 @@
 defmodule Flames.Mixfile do
   use Mix.Project
 
-  @version "0.7.0"
+  @version "0.7.1"
   def project do
     [
       app: :flames,
       version: @version,
-      elixir: "~> 1.2",
+      elixir: "~> 1.15",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: compilers(Mix.env()),
       name: "flames",

@@ -43,6 +43,6 @@ defmodule Flames.Logger do
   end
 
   defp meet_level?(lvl) do
-    Logger.compare_levels(lvl, :warn) in [:gt, :eq]
+    Logger.compare_levels(lvl, :warning) in [:gt, :eq]
   end
 end
