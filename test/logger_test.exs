@@ -29,6 +29,11 @@ defmodule Flames.LoggerTest do
     test "similar messages produce the same hash" do
       assert LogHandler.hash(Fixtures.with_pid_1()) == LogHandler.hash(Fixtures.with_pid_2())
     end
+
+    test "large message cut off at 4k" do
+      assert LogHandler.hash(Messages.large_message_1()) ==
+               LogHandler.hash(Messages.large_message_2() |> String.slice(0..4096))
+    end
   end
 
   def post_event(message \\ "zomg") do
