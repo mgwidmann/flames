@@ -111,7 +111,7 @@ defmodule Flames.Error.Worker do
         # Don't store more than a few incidents
         incidents:
           if length(e.incidents) >= @max_incidents do
-            e.incidents
+            e.incidents |> Enum.map(&Map.from_struct/1)
           else
             [
               %{message: truncate_message(message.full), timestamp: timestamp}
