@@ -2,6 +2,10 @@ defmodule Flames.Error.Worker do
   use GenServer
   require Logger
 
+  # 4k * 101 = ~400kb record max (+1 on count for original)
+  @max_message_size 1024 * 4
+  @max_incidents 100
+
   def start_link(_) do
     GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
@@ -104,10 +108,16 @@ defmodule Flames.Error.Worker do
       e
       |> Flames.Error.recur_changeset(%{
         count: e.count + 1,
-        incidents: [
-          %{message: message.full, timestamp: timestamp}
-          | Enum.map(e.incidents, &Map.from_struct/1)
-        ]
+        # Don't store more than a few incidents
+        incidents:
+          if length(e.incidents) >= @max_incidents do
+            e.incidents
+          else
+            [
+              %{message: truncate_message(message.full), timestamp: timestamp}
+              | Enum.map(e.incidents, &Map.from_struct/1)
+            ]
+          end
       })
     else
       {file, fun, line} = analyze(message.full)
@@ -137,21 +147,21 @@ defmodule Flames.Error.Worker do
   defp normalize_message(full_message = [message, stack, fun | args])
        when is_binary(stack) or is_list(stack) do
     %{
-      message: IO.chardata_to_string(message),
+      message: IO.chardata_to_string(message) |> truncate_message(),
       stack: IO.chardata_to_string(stack),
       module: fun |> IO.chardata_to_string() |> String.trim() |> String.replace("Function: ", ""),
       args: args |> IO.chardata_to_string() |> String.trim() |> String.replace("Args: ", ""),
-      full: IO.chardata_to_string(full_message)
+      full: IO.chardata_to_string(full_message) |> truncate_message()
     }
   end
 
   defp normalize_message(message) do
     %{
-      message: IO.chardata_to_string(message),
+      message: IO.chardata_to_string(message) |> truncate_message(),
       stack: nil,
       module: nil,
       args: nil,
-      full: IO.chardata_to_string(message)
+      full: IO.chardata_to_string(message) |> truncate_message()
     }
   end
 
@@ -198,16 +208,18 @@ defmodule Flames.Error.Worker do
   def hash_ignore_regex(), do: @hash_ignore_regex
   def strip_variable_data(msg), do: msg |> String.replace(hash_ignore_regex(), "")
 
-  @max_message_size 1024 * 4
+  # Only take the first 4k of a message, otherwise it could be too long and cause memory issues
+  def truncate_message(<<msg::size(@max_message_size), rest::bitstring>>)
+      when byte_size(rest) > 0 do
+    <<msg::size(@max_message_size)>>
+  end
+
+  def truncate_message(msg), do: msg
 
   def hash(list) when is_list(list), do: list |> hd |> hash
 
-  # Only take the first 4k of a message, otherwise it could be too long and cause memory issues
-  def hash(<<msg::size(@max_message_size), rest::bitstring>>) when byte_size(rest) > 0,
-    do: hash(<<msg::size(@max_message_size)>>)
-
   def hash(msg) do
-    msg = strip_variable_data(msg)
+    msg = msg |> strip_variable_data()
     :crypto.hash(:sha256, msg) |> Base.encode16()
   end
 end

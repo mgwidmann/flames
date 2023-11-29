@@ -31,8 +31,8 @@ defmodule Flames.LoggerTest do
     end
 
     test "large message cut off at 4k" do
-      assert LogHandler.hash(Messages.large_message_1()) ==
-               LogHandler.hash(Messages.large_message_2() |> String.slice(0..4096))
+      assert LogHandler.hash(Messages.large_message_1() |> LogHandler.truncate_message()) ==
+               LogHandler.hash(Messages.large_message_2() |> LogHandler.truncate_message())
     end
   end
 
