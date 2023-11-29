@@ -42,6 +42,10 @@ defmodule Flames.Logger do
     Keyword.get(meta, :flames, true)
   end
 
+  defp meet_level?(:warn) do
+    meet_level?(:warning)
+  end
+
   defp meet_level?(lvl) do
     Logger.compare_levels(lvl, :warning) in [:gt, :eq]
   end
