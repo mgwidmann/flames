@@ -2,8 +2,8 @@ defmodule Flames.Error.Worker do
   use GenServer
   require Logger
 
-  # 4k * 101 = ~400kb record max (+1 on count for original)
-  @max_message_size 1024 * 4
+  # 10kb * 101 = ~1.01MB record max (+1 on count for original)
+  @max_message_size 1024 * 10
   @max_incidents 100
 
   def start_link(_) do
@@ -151,7 +151,7 @@ defmodule Flames.Error.Worker do
       stack: IO.chardata_to_string(stack),
       module: fun |> IO.chardata_to_string() |> String.trim() |> String.replace("Function: ", ""),
       args: args |> IO.chardata_to_string() |> String.trim() |> String.replace("Args: ", ""),
-      full: IO.chardata_to_string(full_message) |> truncate_message()
+      full: IO.chardata_to_string(full_message)
     }
   end
 
@@ -161,7 +161,7 @@ defmodule Flames.Error.Worker do
       stack: nil,
       module: nil,
       args: nil,
-      full: IO.chardata_to_string(message) |> truncate_message()
+      full: IO.chardata_to_string(message)
     }
   end
 
