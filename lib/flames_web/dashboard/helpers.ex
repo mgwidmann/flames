@@ -2,6 +2,7 @@ defmodule Flames.Dashboard.Helpers do
   use Phoenix.Component
 
   attr :type, :string, default: nil
+  attr :color, :atom, default: :red
   attr :class, :string, default: nil
   attr :rest, :global, include: ~w(disabled form name value)
 
@@ -12,7 +13,8 @@ defmodule Flames.Dashboard.Helpers do
     <button
       type={@type || "button"}
       class={[
-        "inline-block px-6 py-2.5 bg-rose-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-rose-700 hover:shadow-lg focus:bg-rose-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-rose-800 active:shadow-lg transition duration-150 ease-in-out",
+        "inline-block px-6 py-2.5 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out",
+        button_classes_for_color(@color),
         @class
       ]}
       {@rest}
@@ -20,6 +22,18 @@ defmodule Flames.Dashboard.Helpers do
       <%= render_slot(@inner_block) %>
     </button>
     """
+  end
+
+  def button_classes_for_color(:red) do
+    "bg-rose-600 active:bg-rose-800 focus:bg-rose-700 hover:bg-rose-700"
+  end
+
+  def button_classes_for_color(:amber) do
+    "bg-amber-600 active:bg-amber-800 focus:bg-amber-700 hover:bg-amber-700"
+  end
+
+  def button_classes_for_color(_) do
+    "bg-yellow-500 active:bg-yellow-800 focus:bg-yellow-700 hover:bg-yellow-700"
   end
 
   attr :level, :string
